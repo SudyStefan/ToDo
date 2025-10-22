@@ -7,6 +7,16 @@ export const AddView = ({isVisible, onAdd, onClose}: any) => {
   const [text, setText] = React.useState("");
   const inputRef = React.useRef<TextInput>(null);
 
+  const initClose = () => {
+    setText("");
+    onClose();
+  }
+
+  const initAdd = () => {
+    onAdd(text);
+    setText("");
+  }
+
   return (
     <View>
       <Modal 
@@ -18,14 +28,14 @@ export const AddView = ({isVisible, onAdd, onClose}: any) => {
           <TextInput 
             ref={inputRef} 
             style={{ ...styles.defaultText, textAlign: "center" }} 
-            placeholder='add todo' 
+            placeholder='todo name...' 
             value={text} 
             onChangeText={setText} />
           <View style={{flexDirection:"row", marginLeft: 10}}>
-            <Pressable onPress={() => onAdd(text)} style={styles.pressableButton}>
+            <Pressable onPress={initClose} style={styles.pressableButton}>
               <Text style={styles.pressableText}>ADD</Text>
             </Pressable>
-            <Pressable onPress={onClose} style={{...styles.pressableButton, backgroundColor:"gray"}}>
+            <Pressable onPress={initClose} style={{...styles.pressableButton, backgroundColor:"gray"}}>
               <Text style={styles.pressableText}>CANCEL</Text>
             </Pressable>
           </View>

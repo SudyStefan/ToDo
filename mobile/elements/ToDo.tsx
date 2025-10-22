@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
 import { ToDoEntry } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { TodoItem } from "../elements/TodoItem";
 import { AddView } from "../elements/AddView";
-
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function ToDo({data, API_URL}: {data: ToDoEntry[], API_URL?: string}) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
@@ -37,7 +37,7 @@ export default function ToDo({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
               <TodoItem item={item} onDelete={deleteTodo} onPress={checkTodo}/>
             }/>
       <Pressable onPress={() => setAddViewVisible(true)} style={styles.roundPressableButton}>
-        <Text style={styles.roundPressableButtonText}>+</Text>
+        <Ionicons name="add" size={Dimensions.get('window').height * 0.05} color="white" />
       </Pressable>
     </View>
   );

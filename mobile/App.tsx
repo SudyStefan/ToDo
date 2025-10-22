@@ -12,7 +12,7 @@ const DummyData: ToDoEntry[] = [
   { id: 7, text: 'Write some code', done: false, creationDate: new Date("2025-10-01") },
   { id: 8, text: 'Watch a movie', done: true, creationDate: new Date("2025-10-01") },
   { id: 9, text: 'Cook dinner', done: false, creationDate: new Date("2025-10-01") },
-  { id: 10, text: 'Exercise', done: false, creationDate: new Date("2025-10-01") },
+  { id: 10, text: 'asdadsasdadsasdasdasdadasdasd', done: false, creationDate: new Date("2025-10-01") },
 ];
 
 export default function App() {

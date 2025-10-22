@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const { width, height} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   item: {
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: width * 0.2,
     height: width * 0.2,
-    bottom: height * 0.05,
+    bottom: height * 0.07,
     right: width * 0.1,
   },
   roundPressableButtonText: {
@@ -71,13 +71,15 @@ export const styles = StyleSheet.create({
   },
   root: {
     paddingTop: height * 0.05,
-    paddingHorizontal: width * 0.05,
     height: '100%',
     width: '100%',
   },
   todoList: {
     flex: 1,
     justifyContent: 'center',
+  },
+  todoText: {
+    fontSize: height * 0.04,
+    maxWidth: width * 0.8,
   }
-
 });

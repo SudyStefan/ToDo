@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, Dimensions } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles } from "../styles/styles";
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 export const TodoItem = ({ item, onPress, onDelete }: any) => {
   const renderRightActions = () => (
@@ -13,9 +14,9 @@ export const TodoItem = ({ item, onPress, onDelete }: any) => {
   return (
     <Swipeable renderRightActions={renderRightActions} onSwipeableOpen={() => onDelete(item.id)} containerStyle={{ width: '100%' }}>
       <View style={styles.item}>
-        <Text>{item.text}</Text>
-        <Pressable onPress={() => onPress(item.id)} style={{marginLeft: 40}}>
-          <Text style={styles.pressableText}>{item.done ? "✅" : "⬜"}</Text>
+        <Text style={styles.todoText} numberOfLines={1}>{item.text}</Text>
+        <Pressable onPress={() => onPress(item.id)}>
+          <Ionicons name={item.done ? "checkmark-circle" : "ellipse-outline"} size={Dimensions.get('window').height * 0.06} color={item.done ? "green" : "gray"} />
         </Pressable>
       </View>
     </Swipeable>
