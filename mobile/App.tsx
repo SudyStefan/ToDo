@@ -1,18 +1,31 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, FlatList, Pressable } from "react-native";
+import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet } from "react-native";
+import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { ToDoEntry } from "../shared/types/ToDoEntry";
-//import { DummyData } from "../shared/dummyData/dummyData";
 
 const DummyData: ToDoEntry[] = [
-  { id: 1, text: 'Learn TypeScript', done: true },
-  { id: 2, text: 'Build a ToDo App', done: false },
-  { id: 3, text: 'Test the App', done: false },
-  { id: 4, text: 'Learn CSS', done: false },
+  { id: 1, text: 'Learn TypeScript', done: true, creationDate: new Date("2025-10-01") },
+  { id: 2, text: 'Build a ToDo App', done: false, creationDate: new Date("2025-10-01") },
+  { id: 3, text: 'Test the App', done: false, creationDate: new Date("2025-10-01") },
+  { id: 4, text: 'Learn CSS', done: false, creationDate: new Date("2025-10-01") },
 ];
 
-// const doneToString = (done: boolean): string => {
-//   return done ? "Done" : "Not Done";
-// }
+const TodoItem = ({ item, onDelete }: any) => {
+  const renderRightActions = () => (
+    <View style={styles.deleteContainer}>
+      <Text style={styles.deleteText}>Delete</Text>
+    </View>
+  );
+
+  return (
+    <ReanimatedSwipeable renderRightActions={renderRightActions} onSwipeableOpen={() => onDelete(item.id)}>
+      <View style={styles.item}>
+        <Text>{item.text}</Text>
+      </View>
+    </ReanimatedSwipeable>
+  );
+}
+
 
 export default function App() {
   const [todos, setTodos] = useState<ToDoEntry[]>(DummyData);
@@ -24,19 +37,8 @@ export default function App() {
     fetch(API_URL).then(res => res.json()).then(setTodos);
   }, []);
 
-  // const addTodo = async () => {
-  //   const res = await fetch(API_URL, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ text }),
-  //   });
-  //   const newTodo: ToDoEntry = await res.json();
-  //   setTodos([...todos, newTodo]);
-  //   setText("");
-  // };
-
   const addTodo = () => {
-    setTodos([...todos, { id: todos.length+1, text, done: false }]);
+    setTodos([...todos, { id: todos.length+1, text, done: false , creationDate: new Date()}]);
     setText("");
   }
 
@@ -48,6 +50,7 @@ export default function App() {
     setTodos(todos.filter(todo => todo.id !== id));
   }
 
+  
   return (
     <View style={{ padding: 20 }}>
       <TextInput
@@ -62,7 +65,8 @@ export default function App() {
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => 
             <View style={{ flexDirection: "row", gap: 5, alignContent:"flex-start", justifyContent: "space-between"}}>
-              <Text >{item.text}</Text>
+              <TodoItem item={item} onDelete={deleteTodo} />
+              {/* <Text>{item.text}</Text>
               <View style={{ flexDirection: "row", marginLeft: 30, alignContent: "center", justifyContent: "flex-end" }}>
                 <Pressable onPress={() => checkTodo(item.id)}>
                   <Text>{item.done ? "✅" : "⬜"}</Text>
@@ -70,9 +74,29 @@ export default function App() {
                 <Pressable onPress={() => deleteTodo(item.id)}>
                   <Text>❌</Text>
                 </Pressable>
-              </View>
+              </View> */}
             </View>
           }/>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  item: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+  },
+  deleteContainer: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+    flex: 1,
+  },
+  deleteText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
