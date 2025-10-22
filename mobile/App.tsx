@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, FlatList } from "react-native";
+import { View, Text, TextInput, Button, FlatList, Pressable } from "react-native";
 import { ToDoEntry } from "../shared/types/ToDoEntry";
 //import { DummyData } from "../shared/dummyData/dummyData";
 
@@ -10,8 +10,12 @@ const DummyData: ToDoEntry[] = [
   { id: 4, text: 'Learn CSS', done: false },
 ];
 
+// const doneToString = (done: boolean): string => {
+//   return done ? "Done" : "Not Done";
+// }
+
 export default function App() {
-  const [todos, setTodos] = useState<ToDoEntry[]>([]);
+  const [todos, setTodos] = useState<ToDoEntry[]>(DummyData);
   const [text, setText] = useState("");
 
   const API_URL = "http://192.168.0.208:4000/todo";
@@ -32,12 +36,16 @@ export default function App() {
   // };
 
   const addTodo = () => {
-    DummyData.push({ id: DummyData.length+1, text, done: false });
+    setTodos([...todos, { id: todos.length+1, text, done: false }]);
     setText("");
   }
 
   const checkTodo = (id: number) => {
     setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
+  }
+
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
   }
 
   return (
@@ -50,14 +58,21 @@ export default function App() {
       />
       <Button title="Add" onPress={addTodo} />
         <FlatList
-          data={DummyData}
+          data={todos}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => 
-            <View style={{ flexDirection: "row", gap: 5, alignContent: "center", justifyContent: "center" }}>
-              <Text>{item.text}</Text>
-              <Button title={item.done.toString()} onPress={() => checkTodo(item.id)} />
-            </View>}
-        />
+            <View style={{ flexDirection: "row", gap: 5, alignContent:"flex-start", justifyContent: "space-between"}}>
+              <Text >{item.text}</Text>
+              <View style={{ flexDirection: "row", marginLeft: 30, alignContent: "center", justifyContent: "flex-end" }}>
+                <Pressable onPress={() => checkTodo(item.id)}>
+                  <Text>{item.done ? "✅" : "⬜"}</Text>
+                </Pressable>
+                <Pressable onPress={() => deleteTodo(item.id)}>
+                  <Text>❌</Text>
+                </Pressable>
+              </View>
+            </View>
+          }/>
     </View>
   );
 }

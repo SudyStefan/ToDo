@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { ToDoEntry } from "../../shared/types/ToDoEntry.js";
-import { DummyData } from "../../shared/dummyData/dummyData.js";
+//import { DummyData } from "../../shared/dummyData/dummyData.js";
 
 function App() {
   const [entries, setTodos] = useState<ToDoEntry[]>([]);
   const [text, setText] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:4000/todo")
+    fetch("http://192.168.0.208:4000/todo")
       .then(res => res.json())
       .then(setTodos);
   }, []);
 
   const addTodo = async () => {
-    const res = await fetch("http://localhost:4000/todo", {
+    const res = await fetch("http://192.168.0.208:4000/todo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
