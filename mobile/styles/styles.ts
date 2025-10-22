@@ -4,11 +4,11 @@ const { height, width } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#fff',
+    backgroundColor: '#333',
     paddingHorizontal: width * 0.01,
     paddingVertical: height * 0.010,
     borderBottomWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#222',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -76,10 +76,17 @@ export const styles = StyleSheet.create({
   },
   todoList: {
     flex: 1,
+    marginHorizontal: width * 0.07,
     justifyContent: 'center',
   },
   todoText: {
-    fontSize: height * 0.04,
-    maxWidth: width * 0.8,
+    fontSize: height * 0.03,
+    maxWidth: width * 0.6,
+    color: '#eee',
+  },
+  tabBar: {
+    backgroundColor: '#111', 
+    height: "10%",
+    justifyContent: 'flex-start',
   }
 });
