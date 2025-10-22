@@ -6,7 +6,7 @@ import { styles } from "../styles/styles";
 export const TodoItem = ({ item, onPress, onDelete }: any) => {
   const renderRightActions = () => (
     <View style={styles.deleteContainer}>
-      <Text style={styles.deleteText}>Delete</Text>
+      <Text style={styles.deleteText}>REMOVE</Text>
     </View>
   );
 

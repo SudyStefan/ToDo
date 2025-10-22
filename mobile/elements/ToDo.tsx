@@ -7,10 +7,12 @@ import { AddView } from "../elements/AddView";
 
 
 export default function ToDo({data, API_URL}: {data: ToDoEntry[], API_URL?: string}) {
+  const [todos, setTodos] = useState<ToDoEntry[]>(data);
+  const [addViewVisible, setAddViewVisible] = useState(false);
 
-  const addTodo = () => {
+  const handleAdd = (text: string) => {
     setTodos([...todos, { id: todos.length+1, text, done: false , creationDate: new Date()}]);
-    setText("");
+    setAddViewVisible(false);
   }
 
   const checkTodo = (id: number) => {
@@ -21,23 +23,22 @@ export default function ToDo({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
     setTodos(todos.filter(todo => todo.id !== id));
   }
 
-  const [todos, setTodos] = useState<ToDoEntry[]>(data);
-  const [text, setText] = useState("");
-  const [addViewVisible, setAddViewVisible] = useState(false);
   return (
-    <View style={{ padding: 20 }}>
-      <AddView isVisible={addViewVisible} close={() => setAddViewVisible(false)}/>
-      <Pressable onPress={() => setAddViewVisible(true)} style={styles.pressableButton}>
-        <Text style={styles.pressableText}>ADD TASK</Text>
+    <View style={styles.root}>
+        <AddView 
+          isVisible={addViewVisible} 
+          onAdd={handleAdd} 
+          onClose={() => setAddViewVisible(false)}/>
+          <FlatList
+            data={todos}
+            keyExtractor={item => item.id.toString()}
+            contentContainerStyle={styles.todoList}
+            renderItem={({ item }) => 
+              <TodoItem item={item} onDelete={deleteTodo} onPress={checkTodo}/>
+            }/>
+      <Pressable onPress={() => setAddViewVisible(true)} style={styles.roundPressableButton}>
+        <Text style={styles.roundPressableButtonText}>+</Text>
       </Pressable>
-      <FlatList
-        data={todos}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => 
-          <View style={{ flexDirection: "row", gap: 5, alignContent:"flex-start", justifyContent: "space-between"}}>
-            <TodoItem item={item} onDelete={deleteTodo} onPress={checkTodo}/>
-          </View>
-        }/>
     </View>
   );
 }

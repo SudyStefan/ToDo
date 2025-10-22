@@ -1,10 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height} = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   item: {
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: width * 0.01,
+    paddingVertical: height * 0.010,
     borderBottomWidth: 1,
     borderColor: '#eee',
     flexDirection: 'row',
@@ -12,33 +14,70 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pressableButton: {
-    marginTop:20, 
-    padding:10, 
+    flex: 1,
+    marginTop: height * 0.02,
+    padding: width * 0.03,
+    paddingHorizontal: width * 0.05,
+    alignItems: 'center',
+    borderRadius: 3,
     backgroundColor:"dodgerblue",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
+  },   
+  pressableText: {
+    color: 'white',
+  }, 
+  roundPressableButton: {
+    position: 'absolute',
+    backgroundColor: 'dodgerblue',
+    borderRadius: width * 0.2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: width * 0.2,
+    height: width * 0.2,
+    bottom: height * 0.05,
+    right: width * 0.1,
+  },
+  roundPressableButtonText: {
+    color: 'white',
+    fontSize: height * 0.05,
+    textAlign: 'center',
   },
   deleteContainer: {
+    flex: 1,
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    paddingHorizontal: 20,
-    flex: 1,
+    paddingHorizontal: width * 0.05,
   },
   deleteText: {
     color: 'white',
     fontWeight: 'bold',
   },
   addView: {
-    position: 'absolute',
+    flex: 1,
     width: '100%',
+    height: '100%',
+    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    margin: 50,
+    paddingTop: height * 0.1,
+    paddingHorizontal: width * 0.05,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
-  pressableText: {
+  defaultText: {
     color: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: height * 0.03,
   },
+  root: {
+    paddingTop: height * 0.05,
+    paddingHorizontal: width * 0.05,
+    height: '100%',
+    width: '100%',
+  },
+  todoList: {
+    flex: 1,
+    justifyContent: 'center',
+  }
+
 });
