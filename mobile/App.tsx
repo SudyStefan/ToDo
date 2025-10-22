@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet } from "react-native";
-import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { ToDoEntry } from "../shared/types/ToDoEntry";
 
 const DummyData: ToDoEntry[] = [
@@ -10,7 +10,7 @@ const DummyData: ToDoEntry[] = [
   { id: 4, text: 'Learn CSS', done: false, creationDate: new Date("2025-10-01") },
 ];
 
-const TodoItem = ({ item, onDelete }: any) => {
+const TodoItem = ({ item, onPress, onDelete }: any) => {
   const renderRightActions = () => (
     <View style={styles.deleteContainer}>
       <Text style={styles.deleteText}>Delete</Text>
@@ -18,11 +18,14 @@ const TodoItem = ({ item, onDelete }: any) => {
   );
 
   return (
-    <ReanimatedSwipeable renderRightActions={renderRightActions} onSwipeableOpen={() => onDelete(item.id)}>
+    <Swipeable renderRightActions={renderRightActions} onSwipeableOpen={() => onDelete(item.id)} containerStyle={{ width: '100%' }}>
       <View style={styles.item}>
         <Text>{item.text}</Text>
+        <Pressable onPress={() => onPress(item.id)} style={styles.pressable}>
+          <Text style={{ fontSize: 24 }}>{item.done ? "✅" : "⬜"}</Text>
+        </Pressable>
       </View>
-    </ReanimatedSwipeable>
+    </Swipeable>
   );
 }
 
@@ -65,16 +68,7 @@ export default function App() {
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => 
             <View style={{ flexDirection: "row", gap: 5, alignContent:"flex-start", justifyContent: "space-between"}}>
-              <TodoItem item={item} onDelete={deleteTodo} />
-              {/* <Text>{item.text}</Text>
-              <View style={{ flexDirection: "row", marginLeft: 30, alignContent: "center", justifyContent: "flex-end" }}>
-                <Pressable onPress={() => checkTodo(item.id)}>
-                  <Text>{item.done ? "✅" : "⬜"}</Text>
-                </Pressable>
-                <Pressable onPress={() => deleteTodo(item.id)}>
-                  <Text>❌</Text>
-                </Pressable>
-              </View> */}
+              <TodoItem item={item} onDelete={deleteTodo} onPress={checkTodo}/>
             </View>
           }/>
     </View>
@@ -84,9 +78,16 @@ export default function App() {
 const styles = StyleSheet.create({
   item: {
     backgroundColor: '#fff',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: '#eee',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  pressable: {
+    paddingLeft: 40,
   },
   deleteContainer: {
     backgroundColor: 'red',

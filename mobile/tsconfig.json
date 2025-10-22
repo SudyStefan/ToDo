@@ -3,5 +3,5 @@
   "compilerOptions": {
     "strict": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "../shared/types/ToDoEntry.ts", "../shared/dummyData/dummyData.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "../shared/types/ToDoEntry.ts"],
 }
