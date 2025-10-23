@@ -18,13 +18,15 @@ export default function UndoPopup({data, defaultText, onUndo}: any) {
   }
 
   return(
-    <FlatList 
-      data={data} 
-      keyExtractor={item => item.id.toString()}
-      contentContainerStyle={styles.undoList}
-      renderItem={({ item }) => 
-        <UndoItem text={item.text} id={item.id} />
-      }
-    />
+    <View style={styles.fullScreenView}>
+      <FlatList 
+        data={data} 
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={styles.undoList}
+        renderItem={({ item }) => 
+          <UndoItem text={item.text} id={item.id} />
+        }
+      />
+    </View>
   )
 }
