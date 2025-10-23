@@ -4,24 +4,14 @@ import { ToDoEntry } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { TodoItem } from "./TodoItem";
 
-export default function SinglePage({data, API_URL}: {data: ToDoEntry[], API_URL?: string}) {
-  const [todos, setTodos] = useState<ToDoEntry[]>(data);
-
-  const checkTodo = (id: number) => {
-    setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
-  }
-
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  }
-
+export default function SinglePage({data, onCheck, onDelete}: {data: ToDoEntry[], onCheck: Function, onDelete: Function}) {
   return (
     <FlatList
-      data={todos}
+      data={data}
       keyExtractor={item => item.id.toString()}
       contentContainerStyle={styles.todoList}
       renderItem={({ item }) => 
-        <TodoItem item={item} onDelete={deleteTodo} onPress={checkTodo}/>
+        <TodoItem item={item} onDelete={onCheck} onPress={onDelete}/>
       }/>
   );
 }

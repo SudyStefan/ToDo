@@ -12,11 +12,6 @@ export const AddView = ({isVisible, onAdd, onClose}: any) => {
     onClose();
   }
 
-  const initAdd = () => {
-    onAdd(text);
-    setText("");
-  }
-
   return (
     <View style={styles.fullScreenView}>
       <Modal 
@@ -33,7 +28,7 @@ export const AddView = ({isVisible, onAdd, onClose}: any) => {
             value={text} 
             onChangeText={setText} />
           <View style={{flexDirection:"row", marginLeft: 10}}>
-            <Pressable onPress={initClose} style={styles.pressableButton}>
+            <Pressable onPress={() => {onAdd(text); initClose()}} style={styles.pressableButton}>
               <Text style={styles.pressableText}>ADD</Text>
             </Pressable>
             <Pressable onPress={initClose} style={{...styles.pressableButton, backgroundColor:"gray"}}>

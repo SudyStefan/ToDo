@@ -17,13 +17,22 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
 
-  const handleAdd = (text: string) => {
+  const checkTodo = (id: number) => {
+    setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
+  }
+
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  }
+
+  const addTodo = (text: string) => {
+    console.log(text);
     setTodos([...todos, { id: todos.length+1, text, done: false , creationDate: new Date()}]);
     setAddViewVisible(false);
   }
 
   const SingleRoute = () => (
-    <SinglePage data={data} API_URL={API_URL} />
+    <SinglePage data={todos} onCheck={(id: number) => checkTodo(id)} onDelete={(id: number) => deleteTodo(id)} />
   );
 
   const RecRoute = () => (
@@ -38,10 +47,10 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   const [index, setIndex] = React.useState(0);
   
   return (
-    <View style={styles.root}>
+    <View>
       <AddView 
         isVisible={addViewVisible} 
-        onAdd={handleAdd} 
+        onAdd={addTodo} 
         onClose={() => setAddViewVisible(false)}/>
       <TabView
         navigationState={{ index, routes }}

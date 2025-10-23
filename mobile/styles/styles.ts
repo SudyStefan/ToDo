@@ -63,10 +63,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: height * 0.03,
   },
-  root: {
-    flex: 1,
-    marginTop: height * 0.05,
-  },
   todoList: {
     flex: 1,
     marginHorizontal: width * 0.07,
