@@ -84,6 +84,7 @@ export const styles = StyleSheet.create({
   },
   undoList: {
     flex: 1,
+    position: 'absolute',
     marginHorizontal: width * 0.07,
     justifyContent: 'center',
     bottom: height*0.4,

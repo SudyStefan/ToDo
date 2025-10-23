@@ -8,7 +8,7 @@ export default function UndoPopup({data, defaultText, onUndo}: any) {
 
   const UndoItem = ({ text, id }: { text: string, id: number  }) => {
     return (
-      <View style={styles.fullScreenView}>
+      <View style={styles.item}>
         <Text>{defaultText} {text}</Text>
         <Pressable onPress={() => onUndo(id)}>
           <Text style={{color: 'dodgerblue'}}>UNDO</Text>

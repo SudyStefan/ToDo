@@ -57,7 +57,7 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   const [index, setIndex] = React.useState(0);
   
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex:1}}>
       <AddView 
         isVisible={addViewVisible} 
         onAdd={addTodo} 
