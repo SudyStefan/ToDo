@@ -81,5 +81,11 @@ export const styles = StyleSheet.create({
   fullScreenView: {
     flex: 1,
     position: 'absolute',
-  }
+  },
+  undoList: {
+    flex: 1,
+    marginHorizontal: width * 0.07,
+    justifyContent: 'center',
+    bottom: height*0.4,
+  },
 });

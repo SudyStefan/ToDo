@@ -7,11 +7,11 @@ import { TodoItem } from "./TodoItem";
 export default function SinglePage({data, onCheck, onDelete}: {data: ToDoEntry[], onCheck: Function, onDelete: Function}) {
   return (
     <FlatList
-      data={data}
+      data={data.filter(data => data.done === false)}
       keyExtractor={item => item.id.toString()}
       contentContainerStyle={styles.todoList}
       renderItem={({ item }) => 
-        <TodoItem item={item} onDelete={onCheck} onPress={onDelete}/>
+        <TodoItem item={item} onDelete={onDelete} onPress={onCheck}/>
       }/>
   );
 }

@@ -6,6 +6,8 @@ import SinglePage from "./SinglePage";
 import { styles } from "../styles/styles";
 import FloatingPressable from "./FloatingPressable";
 import { AddView } from "./AddView";
+import DonePage from "./DonePage";
+import UndoPopup from "./UndoPopup";
 
   const routes = [
     { key: 'single', title: 'SINGLE' },
@@ -16,9 +18,17 @@ import { AddView } from "./AddView";
 export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: string}) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
+  const [recentlyChecked, setRecentlyChecked] = useState<ToDoEntry[]>([]);
+  const [recentlyDeleted, setRecentlyDeleted] = useState<ToDoEntry[]>([]);
 
   const checkTodo = (id: number) => {
+    setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
     setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
+  }
+
+  const undoCheck = (id: number) => {
+    //setTodos();
+    setRecentlyChecked(recentlyChecked.filter(todo => todo.id !== id));
   }
 
   const deleteTodo = (id: number) => {
@@ -32,7 +42,7 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   }
 
   const SingleRoute = () => (
-    <SinglePage data={todos} onCheck={(id: number) => checkTodo(id)} onDelete={(id: number) => deleteTodo(id)} />
+    <SinglePage data={todos} onCheck={checkTodo} onDelete={deleteTodo} />
   );
 
   const RecRoute = () => (
@@ -40,18 +50,19 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   );
 
   const DoneRoute = () => (
-    <View/> //To be implemented
+    <DonePage data={todos} onUncheck={checkTodo} onDelete={deleteTodo}></DonePage>
   );
 
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   
   return (
-    <View>
+    <View style={{flex: 1}}>
       <AddView 
         isVisible={addViewVisible} 
         onAdd={addTodo} 
         onClose={() => setAddViewVisible(false)}/>
+      <UndoPopup data={recentlyChecked} defaultText="CHECKED" onUndo={undoCheck} />
       <TabView
         navigationState={{ index, routes }}
         renderScene={SceneMap({
