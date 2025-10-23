@@ -1,5 +1,5 @@
 import { ToDoEntry } from "../shared/types/ToDoEntry";
-import ToDo from "./components/ToDo";
+import Root from "./components/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const DummyData: ToDoEntry[] = [
@@ -18,7 +18,7 @@ const DummyData: ToDoEntry[] = [
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#333' }}>
-      <ToDo data={DummyData}/>
+      <Root data={DummyData}/>
     </GestureHandlerRootView>
   );
 }

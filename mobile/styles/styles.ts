@@ -23,21 +23,18 @@ export const styles = StyleSheet.create({
     backgroundColor:"dodgerblue",
   },   
   pressableText: {
-    color: 'white',
+    color: '#aaa',
   }, 
   roundPressableButton: {
-    position: 'absolute',
     backgroundColor: 'dodgerblue',
     borderRadius: width * 0.2,
     alignItems: 'center',
     justifyContent: 'center',
     width: width * 0.2,
     height: width * 0.2,
-    bottom: height * 0.07,
-    right: width * 0.1,
   },
   roundPressableButtonText: {
-    color: 'white',
+    color: '#aaa',
     fontSize: height * 0.05,
     textAlign: 'center',
   },
@@ -54,13 +51,10 @@ export const styles = StyleSheet.create({
   },
   addView: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: height * 0.1,
     paddingHorizontal: width * 0.05,
+    paddingBottom: height * 0.2,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
   defaultText: {
@@ -70,9 +64,8 @@ export const styles = StyleSheet.create({
     fontSize: height * 0.03,
   },
   root: {
-    paddingTop: height * 0.05,
-    height: '100%',
-    width: '100%',
+    flex: 1,
+    marginTop: height * 0.05,
   },
   todoList: {
     flex: 1,
@@ -80,7 +73,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   todoText: {
-    fontSize: height * 0.03,
+    fontSize: height * 0.025,
     maxWidth: width * 0.6,
     color: '#eee',
   },
@@ -88,5 +81,9 @@ export const styles = StyleSheet.create({
     backgroundColor: '#111', 
     height: "10%",
     justifyContent: 'flex-start',
+  },
+  fullScreenView: {
+    flex: 1,
+    position: 'absolute',
   }
 });

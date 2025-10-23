@@ -18,11 +18,12 @@ export const AddView = ({isVisible, onAdd, onClose}: any) => {
   }
 
   return (
-    <View>
+    <View style={styles.fullScreenView}>
       <Modal 
         visible={isVisible} 
         animationType="fade" 
         transparent={true}
+        style={styles.fullScreenView}
         onShow={() => inputRef.current?.focus()}>
         <View style={styles.addView}>
           <TextInput 
