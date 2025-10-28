@@ -1,6 +1,12 @@
+export enum Status {
+  Open,
+  Done,
+  Deleted
+}
+
 export interface ToDoEntry {
   id: number;
   text: string;
-  done: boolean;
-  creationDate: Date
+  status: Status;
+  creationDate: Date;
 }

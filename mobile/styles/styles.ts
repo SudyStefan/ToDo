@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
   },
   deleteContainer: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: colors.soxred,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: width * 0.05,

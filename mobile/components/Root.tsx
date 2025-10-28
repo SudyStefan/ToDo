@@ -1,4 +1,4 @@
-import { ToDoEntry } from "../../shared/types/ToDoEntry";
+import { ToDoEntry, Status } from "../../shared/types/ToDoEntry";
 import { Animated, Text, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useEffect, useRef, useState } from "react";
@@ -15,6 +15,7 @@ const routes = [
   { key: 'done', title: 'DONE' },
 ];
 
+
 type RootProp = {
   data: ToDoEntry[], 
   API_URL?: string
@@ -26,42 +27,35 @@ export const wait = (ms: number) =>
 export default function Root({data, API_URL}: RootProp) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
-  const [recentlyChecked, setRecentlyChecked] = useState<ToDoEntry[]>([]);
-  const [recentlyDeleted, setRecentlyDeleted] = useState<ToDoEntry[]>([]);
-
-
+  const [recentlyChanged, setRecentlyChanged] = useState<ToDoEntry[]>([]);
   const undoOpacity = useRef(new Animated.Value(0)).current;
 
-  const checkTodo = (id: number) => {
-    setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
-    setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
-
+  const changeTodo = (id: number, newStatus: Status) => {
+    setRecentlyChanged([...recentlyChanged, todos.find(todo => todo.id === id)!]);
+    setTodos(todos.map(todo => todo.id === id ? { ...todo, status: newStatus } : todo));
+    
     wait(3000)
-      .then(() => Animated.timing(undoOpacity, {
-                    toValue: 0,
-                    duration: 1000,
-                    useNativeDriver: true,
-                  }).start())
+      .then(() => Animated.timing(undoOpacity, { toValue: 0, duration: 1000, useNativeDriver: true }).start())
       .then(() => wait(1000))
-      .then(() => setRecentlyChecked([])) 
+      .then(() => setRecentlyChanged([])) 
   };
 
-  const undoCheck = (id: number) => {
-    setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
-    setRecentlyChecked(recentlyChecked.filter(todo => todo.id !== id));
-  };
-
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const undoChange = (id: number) => {
+    setTodos(todos.map(todo => todo.id === id ? 
+      { ...todo, status: recentlyChanged.find(todo => todo.id === id)!.status } 
+      : todo ));
+    setRecentlyChanged(recentlyChanged.filter(todo => todo.id !== id));
   };
 
   const addTodo = (text: string) => {
-    setTodos([...todos, { id: todos.length+1, text, done: false , creationDate: new Date()}]);
+    setTodos([...todos, { id: todos.length+1, text, status: Status.Open , creationDate: new Date()}]);
     setAddViewVisible(false);
   };
 
   const SingleRoute = () => (
-    <SinglePage data={todos} onCheck={checkTodo} onDelete={deleteTodo} />
+    <SinglePage 
+    data={todos} 
+    onCheck={(id: number) => changeTodo(id, Status.Done)} />
   );
 
   const RecRoute = () => (
@@ -69,7 +63,10 @@ export default function Root({data, API_URL}: RootProp) {
   );
 
   const DoneRoute = () => (
-    <DonePage data={todos} onUncheck={checkTodo} onDelete={deleteTodo}></DonePage>
+    <DonePage 
+    data={todos} 
+    onUncheck={(id: number) => changeTodo(id, Status.Open)} 
+    onDelete={(id: number) => changeTodo(id, Status.Deleted)} />
   );
 
   const layout = useWindowDimensions();
@@ -92,7 +89,7 @@ export default function Root({data, API_URL}: RootProp) {
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
         tabBarPosition="bottom"
-        commonOptions={{ labelStyle: {fontSize: layout.height * 0.02} }} //HUH?? https://stackoverflow.com/a/79518059
+        commonOptions={{ labelStyle: {fontSize: layout.height * 0.02} }} //??? https://stackoverflow.com/a/79518059
         renderTabBar={props => (
           <TabBar
             {...props}
@@ -109,9 +106,8 @@ export default function Root({data, API_URL}: RootProp) {
           iconName={"add"} />
       </View>
       <UndoPopup 
-      data={recentlyChecked} 
-      defaultText="CHECKED" 
-      onUndo={undoCheck}
+      data={recentlyChanged} 
+      onUndo={(id: number) => undoChange(id)}
       fadeOpacity={undoOpacity} />
     </View>
   );
