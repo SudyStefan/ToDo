@@ -9,20 +9,25 @@ import { AddView } from "./AddView";
 import DonePage from "./DonePage";
 import UndoPopup from "./UndoPopup";
 
-  const routes = [
-    { key: 'single', title: 'SINGLE' },
-    { key: 'rec', title: 'RECURING' },
-    { key: 'done', title: 'DONE' },
-  ];
+const routes = [
+  { key: 'single', title: 'SINGLE' },
+  { key: 'rec', title: 'RECURING' },
+  { key: 'done', title: 'DONE' },
+];
 
-export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: string}) {
+type RootProp = {
+  data: ToDoEntry[], 
+  API_URL?: string
+};
+
+export default function Root({data, API_URL}: RootProp) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChecked, setRecentlyChecked] = useState<ToDoEntry[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] = useState<ToDoEntry[]>([]);
 
   const checkTodo = (id: number) => {
-    setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
+    //setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
     setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
   }
 
@@ -36,7 +41,6 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   }
 
   const addTodo = (text: string) => {
-    console.log(text);
     setTodos([...todos, { id: todos.length+1, text, done: false , creationDate: new Date()}]);
     setAddViewVisible(false);
   }
@@ -57,13 +61,13 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
   const [index, setIndex] = React.useState(0);
   
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1}} testID="Root">
       <AddView 
         isVisible={addViewVisible} 
         onAdd={addTodo} 
         onClose={() => setAddViewVisible(false)}/>
-      <UndoPopup data={recentlyChecked} defaultText="CHECKED" onUndo={undoCheck} />
       <TabView
+        testID="TabView"
         navigationState={{ index, routes }}
         renderScene={SceneMap({
           single: SingleRoute,
@@ -82,12 +86,13 @@ export default function Root({data, API_URL}: {data: ToDoEntry[], API_URL?: stri
         )}
         tabBarPosition="bottom"
       />
-      <View style={{...styles.fullScreenView, bottom: layout.height * 0.1, right: layout.width * 0.07}}>
+      <View style={{position: 'absolute', bottom: layout.height * 0.11, right: layout.width * 0.07}} testID="ButtonView">
         <FloatingPressable 
           onPress={() => setAddViewVisible(true)} 
           style={styles.roundPressableButton}
           iconName={"add"} />
       </View>
+      <UndoPopup data={recentlyChecked} defaultText="CHECKED" onUndo={undoCheck} />
     </View>
   );
 }

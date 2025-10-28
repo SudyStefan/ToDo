@@ -4,7 +4,7 @@ const { height, width } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#333',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
     paddingHorizontal: width * 0.01,
     paddingVertical: height * 0.010,
     borderBottomWidth: 1,
@@ -12,6 +12,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  itemText: {
+    fontSize: height * 0.025,
+    maxWidth: width * 0.6,
+    color: '#eee',
   },
   pressableButton: {
     flex: 1,
@@ -66,12 +71,8 @@ export const styles = StyleSheet.create({
   todoList: {
     flex: 1,
     marginHorizontal: width * 0.07,
-    justifyContent: 'center',
-  },
-  todoText: {
-    fontSize: height * 0.025,
-    maxWidth: width * 0.6,
-    color: '#eee',
+    marginTop: height * 0.05,
+    justifyContent: 'flex-start',
   },
   tabBar: {
     backgroundColor: '#111', 
@@ -79,14 +80,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   fullScreenView: {
-    flex: 1,
     position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   undoList: {
-    flex: 1,
-    position: 'absolute',
     marginHorizontal: width * 0.07,
     justifyContent: 'center',
-    bottom: height*0.4,
+    marginTop: height * 0.2,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 50,
   },
 });

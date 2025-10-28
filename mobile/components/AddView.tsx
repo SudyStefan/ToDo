@@ -13,7 +13,7 @@ export const AddView = ({isVisible, onAdd, onClose}: any) => {
   }
 
   return (
-    <View style={styles.fullScreenView}>
+    <View style={styles.fullScreenView} testID='AddView'>
       <Modal 
         visible={isVisible} 
         animationType="fade" 

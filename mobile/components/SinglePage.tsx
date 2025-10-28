@@ -4,9 +4,15 @@ import { ToDoEntry } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { TodoItem } from "./TodoItem";
 
-export default function SinglePage({data, onCheck, onDelete}: {data: ToDoEntry[], onCheck: Function, onDelete: Function}) {
+type SinglePageProp = {
+  data: ToDoEntry[];
+  onCheck: Function;
+  onDelete: Function;
+};
+
+export default function SinglePage({data, onCheck, onDelete}: SinglePageProp) {
   return (
-    <FlatList
+    <FlatList testID="SinglePage"
       data={data.filter(data => data.done === false)}
       keyExtractor={item => item.id.toString()}
       contentContainerStyle={styles.todoList}
