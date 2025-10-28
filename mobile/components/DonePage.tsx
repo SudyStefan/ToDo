@@ -13,11 +13,11 @@ type DonePageProp = {
 export default function DonePage({data, onUncheck, onDelete}: DonePageProp) {
   return (
     <FlatList
-      data={data.filter(data => data.done === true)}
-      keyExtractor={item => item.id.toString()}
-      contentContainerStyle={styles.todoList}
-      renderItem={({ item }) => 
-        <TodoItem item={item} onDelete={onDelete} onPress={onUncheck}/>
-      }/>
+    data={data.filter(data => data.done === true)}
+    keyExtractor={item => item.id.toString()}
+    contentContainerStyle={styles.todoList}
+    renderItem={({ item }) => 
+      <TodoItem item={item} onDelete={onDelete} onPress={onUncheck}/>
+    }/>
   );
 }

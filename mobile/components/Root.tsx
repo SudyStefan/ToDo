@@ -3,7 +3,7 @@ import { Text, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useState } from "react";
 import SinglePage from "./SinglePage";
-import { styles } from "../styles/styles";
+import { styles, colors } from "../styles/styles";
 import FloatingPressable from "./FloatingPressable";
 import { AddView } from "./AddView";
 import DonePage from "./DonePage";
@@ -27,7 +27,7 @@ export default function Root({data, API_URL}: RootProp) {
   const [recentlyDeleted, setRecentlyDeleted] = useState<ToDoEntry[]>([]);
 
   const checkTodo = (id: number) => {
-    //setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
+    setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
     setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
   }
 
@@ -61,7 +61,7 @@ export default function Root({data, API_URL}: RootProp) {
   const [index, setIndex] = React.useState(0);
   
   return (
-    <View style={{flex:1}} testID="Root">
+    <View style={styles.root} testID="Root">
       <AddView 
         isVisible={addViewVisible} 
         onAdd={addTodo} 
@@ -76,15 +76,16 @@ export default function Root({data, API_URL}: RootProp) {
         })}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
+        tabBarPosition="bottom"
+        commonOptions={{ labelStyle: {fontSize: layout.height * 0.02} }} //HUH?? https://stackoverflow.com/a/79518059
         renderTabBar={props => (
           <TabBar
             {...props}
             style={styles.tabBar}
-            indicatorStyle={{top: 0, height: '100%', backgroundColor: '#333'}}
-            activeColor="#fff"
+            indicatorStyle={{top: 0, height: '100%', backgroundColor: colors.primaryDark}}
+            activeColor={colors.secondaryLight}
           />
         )}
-        tabBarPosition="bottom"
       />
       <View style={{position: 'absolute', bottom: layout.height * 0.11, right: layout.width * 0.07}} testID="ButtonView">
         <FloatingPressable 

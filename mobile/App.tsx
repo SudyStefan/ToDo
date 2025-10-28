@@ -17,7 +17,7 @@ const DummyData: ToDoEntry[] = [
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#333' }} testID="GestureRoot">
+    <GestureHandlerRootView testID="GestureRoot">
       <Root data={DummyData}/>
     </GestureHandlerRootView>
   );

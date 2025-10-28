@@ -2,21 +2,35 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
+export const colors = {
+  primaryLight: 'rgb(236, 230, 214)', //eggshell
+  secondaryLight: 'rgb(255, 255, 255)',
+  secondaryDark: 'rgb(11,15,18)', //soft black
+  primaryDark: 'rgb(42, 52, 57)', //gunmetal
+  transparent: 'rgba(0,0,0,0)',
+  soxred: 'rgb(189, 48, 57)', //color of the boston red sox
+  dodgerblue: 'dodgerblue', //color of the la dodgers
+  seattlegreen: 'rgb(0, 122, 51)', //color of the seattle mariners
+};
+
 export const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: colors.primaryDark,
+  },
   item: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
+    backgroundColor: colors.transparent,
     paddingHorizontal: width * 0.01,
     paddingVertical: height * 0.010,
     borderBottomWidth: 1,
-    borderColor: '#222',
+    borderColor: colors.secondaryDark,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   itemText: {
     fontSize: height * 0.025,
-    maxWidth: width * 0.6,
-    color: '#eee',
+    color: colors.primaryLight,
   },
   pressableButton: {
     flex: 1,
@@ -25,13 +39,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     alignItems: 'center',
     borderRadius: 3,
-    backgroundColor:"dodgerblue",
+    backgroundColor: colors.dodgerblue,
   },   
-  pressableText: {
-    color: '#aaa',
-  }, 
   roundPressableButton: {
-    backgroundColor: 'dodgerblue',
+    backgroundColor: colors.dodgerblue,
     borderRadius: width * 0.2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -39,7 +50,7 @@ export const styles = StyleSheet.create({
     height: width * 0.2,
   },
   roundPressableButtonText: {
-    color: '#aaa',
+    color: colors.primaryLight,
     fontSize: height * 0.05,
     textAlign: 'center',
   },
@@ -51,7 +62,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
   },
   deleteText: {
-    color: 'white',
+    color: colors.primaryLight,
     fontWeight: 'bold',
   },
   addView: {
@@ -63,10 +74,10 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
   defaultText: {
-    color: 'white',
+    color: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: height * 0.03,
+    fontSize: height * 0.025,
   },
   todoList: {
     flex: 1,
@@ -88,9 +99,8 @@ export const styles = StyleSheet.create({
   },
   undoList: {
     marginHorizontal: width * 0.07,
-    justifyContent: 'center',
-    marginTop: height * 0.2,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 50,
+    marginTop: height * 0.6,
+    backgroundColor: 'rgba(100, 100, 100, 1)',
+    borderRadius: width * 0.03,
   },
 });
