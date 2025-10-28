@@ -1,32 +1,33 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Animated, AnimatableNumericValue } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { styles } from "../styles/styles";
 import { ToDoEntry } from "../../shared/types/ToDoEntry";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type UndoProp = {
   data: ToDoEntry[], 
   defaultText: string, 
   onUndo: Function, 
-  timeout?: number
+  fadeOpacity?: any,
 }
 
-export default function UndoPopup({data, defaultText, onUndo, timeout = 5000}: UndoProp) {
-  const [active, setActive] = useState<boolean>(false);
-
+export default function UndoPopup({data, defaultText, onUndo, fadeOpacity}: UndoProp) {
   useEffect(() => {
-    if (data.length > 0) {
-      setActive(true);
-      //To implement: remove items after 'timeout' milliseconds (currently only hides view)
-      const t = setTimeout(() => { setActive(false);  }, timeout);
-      return () => clearTimeout(t);
+    if(data && data.length > 0) {
+      Animated.timing(fadeOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true
+      }).start();
     }
-    //setActive(true);
   }, [data]);
+
 
   const UndoItem = ({ text, id }: { text: string, id: number  }) => {
     return (
-      <View style={{ ...styles.item, marginHorizontal: 20, borderBottomWidth: 0 }} testID="UndoItem">
+      <View 
+      style={{ ...styles.item, marginHorizontal: 20, borderBottomWidth: 0}} 
+      testID="UndoItem">
         <Text style={styles.itemText} numberOfLines={1}>{defaultText} {text}</Text>
         <Pressable onPress={() => onUndo(id)}>
           <Text style={{ ...styles.defaultText, color: 'dodgerblue' }}>UNDO</Text>
@@ -36,20 +37,19 @@ export default function UndoPopup({data, defaultText, onUndo, timeout = 5000}: U
   }
 
   return(
-    <View 
-      style={{ ...styles.fullScreenView, justifyContent: 'center' }} 
-      pointerEvents={active ? 'auto' : 'none'} 
-      testID="UndoPopupView">
+    <Animated.View 
+    style={{ ...styles.undoView, opacity: fadeOpacity }} 
+    testID="UndoPopupView">
       <FlatList
-        testID="UndoList"
-        data={data} 
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={styles.undoList}
-        renderItem={({ item }) => 
-          <UndoItem text={item.text} id={item.id} />
-        }
+      testID="UndoList"
+      data={data} 
+      keyExtractor={item => item.id.toString()}
+      contentContainerStyle={styles.undoList}
+      renderItem={({ item }) => 
+        <UndoItem text={item.text} id={item.id} />
+      }
       />
-    </View>
+    </Animated.View>
   )
 }
 

@@ -1,7 +1,7 @@
 import { ToDoEntry } from "../../shared/types/ToDoEntry";
-import { Text, useWindowDimensions, View } from "react-native";
+import { Animated, Text, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SinglePage from "./SinglePage";
 import { styles, colors } from "../styles/styles";
 import FloatingPressable from "./FloatingPressable";
@@ -20,30 +20,45 @@ type RootProp = {
   API_URL?: string
 };
 
+export const wait = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
 export default function Root({data, API_URL}: RootProp) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChecked, setRecentlyChecked] = useState<ToDoEntry[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] = useState<ToDoEntry[]>([]);
 
+
+  const undoOpacity = useRef(new Animated.Value(0)).current;
+
   const checkTodo = (id: number) => {
     setRecentlyChecked([...recentlyChecked, todos.find(todo => todo.id === id)!]);
     setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
-  }
+
+    wait(3000)
+      .then(() => Animated.timing(undoOpacity, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: true,
+                  }).start())
+      .then(() => wait(1000))
+      .then(() => setRecentlyChecked([])) 
+  };
 
   const undoCheck = (id: number) => {
-    //setTodos();
+    setTodos(todos.map(todo => todo.id === id ? { ...todo, done: !todo.done } : todo));
     setRecentlyChecked(recentlyChecked.filter(todo => todo.id !== id));
-  }
+  };
 
   const deleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
-  }
+  };
 
   const addTodo = (text: string) => {
     setTodos([...todos, { id: todos.length+1, text, done: false , creationDate: new Date()}]);
     setAddViewVisible(false);
-  }
+  };
 
   const SingleRoute = () => (
     <SinglePage data={todos} onCheck={checkTodo} onDelete={deleteTodo} />
@@ -93,7 +108,11 @@ export default function Root({data, API_URL}: RootProp) {
           style={styles.roundPressableButton}
           iconName={"add"} />
       </View>
-      <UndoPopup data={recentlyChecked} defaultText="CHECKED" onUndo={undoCheck} />
+      <UndoPopup 
+      data={recentlyChecked} 
+      defaultText="CHECKED" 
+      onUndo={undoCheck}
+      fadeOpacity={undoOpacity} />
     </View>
   );
 }

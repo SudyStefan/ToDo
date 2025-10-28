@@ -4,24 +4,30 @@ import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { ToDoEntry } from '../../shared/types/ToDoEntry';
+import { SwipeableProps } from 'react-native-gesture-handler';
 
 type TodoItemProp = {
   item: ToDoEntry,
   onPress: Function,
-  onDelete: Function
+  onSwipe: Function,
+  swipeLeft?: boolean
+  swipeRight?: boolean
 }
 
-export const TodoItem = ({ item, onPress, onDelete }: TodoItemProp) => {
-  const renderRightActions = () => (
+export const TodoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight = false}: TodoItemProp) => {
+  const renderActions = (text: string) => (
     <View style={styles.deleteContainer}>
-      <Text style={styles.deleteText}>REMOVE</Text>
+      <Text style={styles.deleteText}>{text}</Text>
     </View>
   );
 
   return (
     <Swipeable 
-    renderRightActions={renderRightActions} 
-    onSwipeableOpen={() => onDelete(item.id)} 
+    renderLeftActions={swipeLeft ? () => renderActions("CHECK") : undefined}
+    dragOffsetFromLeftEdge={swipeLeft ? undefined : Number.MAX_VALUE}
+    renderRightActions={swipeRight ? () => renderActions("DELETE") : undefined}
+    dragOffsetFromRightEdge={swipeRight ? undefined : Number.MAX_VALUE}
+    onSwipeableOpen={() => onSwipe(item.id)} 
     containerStyle={{ width: '100%' }} 
     testID="TodoItem">
       <View style={styles.item}>

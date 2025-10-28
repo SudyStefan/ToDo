@@ -13,11 +13,15 @@ type SinglePageProp = {
 export default function SinglePage({data, onCheck, onDelete}: SinglePageProp) {
   return (
     <FlatList testID="SinglePage"
-      data={data.filter(data => data.done === false)}
-      keyExtractor={item => item.id.toString()}
-      contentContainerStyle={styles.todoList}
-      renderItem={({ item }) => 
-        <TodoItem item={item} onDelete={onDelete} onPress={onCheck}/>
-      }/>
+    data={data.filter(data => data.done === false)}
+    keyExtractor={item => item.id.toString()}
+    contentContainerStyle={styles.todoList}
+    renderItem={({ item }) => 
+      <TodoItem 
+      item={item} 
+      onSwipe={() => onDelete()} 
+      onPress={onCheck} 
+      swipeLeft={true} />
+    }/>
   );
 }

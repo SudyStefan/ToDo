@@ -97,9 +97,15 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  undoView: {
+    position: 'absolute', 
+    left: 0, 
+    right: 0, 
+    bottom: height * 0.3,
+    justifyContent: 'center'
+  },
   undoList: {
     marginHorizontal: width * 0.07,
-    marginTop: height * 0.6,
     backgroundColor: 'rgba(100, 100, 100, 1)',
     borderRadius: width * 0.03,
   },
