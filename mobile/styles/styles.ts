@@ -106,8 +106,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   undoList: {
-    marginHorizontal: width * 0.07,
-    backgroundColor: 'rgba(100, 100, 100, 1)',
+    marginHorizontal: width * 0.08,
     borderRadius: width * 0.03,
   },
+  undoItem: {
+    borderRadius: 100,
+    paddingHorizontal: width * 0.04, 
+    marginVertical: 3,
+    borderBottomWidth: 0, 
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(100, 100, 100, 1)',
+  }
 });

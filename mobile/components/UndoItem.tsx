@@ -16,23 +16,23 @@ export const UndoItem = ({ text, id, onUndo, onTimeout }: UndoItemProp) => {
     useEffect(() => {
       Animated.timing(itemOpacity, {
         toValue: 1,
-        duration: 500,
+        duration: 300,
         useNativeDriver: true
       }).start();
 
       wait(3000)
         .then(() => Animated.timing(itemOpacity, {
                       toValue: 0,
-                      duration: 2000,
+                      duration: 1500,
                       useNativeDriver: true
                     }).start())
-        .then(() => wait(2000))
+        .then(() => wait(1500))
         .then(() => onTimeout());
     }, []);
 
     return (
       <Animated.View 
-      style={{ ...styles.item, marginHorizontal: 20, borderBottomWidth: 0, opacity: itemOpacity }} 
+      style={{ ...styles.item, ...styles.undoItem, opacity: itemOpacity }} 
       testID="UndoItem">
         <Text style={styles.itemText} numberOfLines={1}>MOVED '{text}'</Text>
         <Pressable onPress={() => onUndo()}>

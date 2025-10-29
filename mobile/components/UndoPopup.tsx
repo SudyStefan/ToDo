@@ -15,7 +15,7 @@ type UndoProp = {
 export default function UndoPopup({data, onUndo, onTimeout }: UndoProp) {
   return(
     <View
-    style={{ ...styles.undoView }} 
+    style={styles.undoView} 
     testID="UndoPopupView">
       <FlatList
       testID="UndoList"
