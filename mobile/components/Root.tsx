@@ -20,25 +20,38 @@ type RootProp = {
   API_URL?: string
 };
 
+export type RecentlyChanged = {
+  id: number,
+  text: string,
+  prevStatus: Status,
+  currentStatus: Status,
+};
+
 export const wait = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
 
 export default function Root({data, API_URL}: RootProp) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
-  const [recentlyChanged, setRecentlyChanged] = useState<ToDoEntry[]>([]);
+  const [recentlyChanged, setRecentlyChanged] = useState<RecentlyChanged[]>([]);
 
   const changeTodo = (id: number, newStatus: Status) => {
-
-    setRecentlyChanged([...recentlyChanged, todos.find(todo => todo.id === id)!]);
-    setTodos(todos.map(todo => todo.id === id ? { ...todo, status: newStatus } : todo));
+    let todo = todos.find(item => item.id === id)!;
+    setRecentlyChanged([...recentlyChanged, 
+      { 
+        id: todo.id, 
+        text: todo.text, 
+        prevStatus: todo.status, 
+        currentStatus: newStatus 
+      }]);
+    setTodos(todos.map(item => item.id === id ? { ...item, status: newStatus } : item));
   };
 
   const undoChange = (id: number) => {
-    setTodos(todos.map(todo => todo.id === id ? 
-      { ...todo, status: recentlyChanged.find(todo => todo.id === id)!.status } 
+    setTodos(items => items.map(todo => todo.id === id ? 
+      { ...todo, status: recentlyChanged.find(item => item.id === id)!.prevStatus } 
       : todo ));
-    setRecentlyChanged(recentlyChanged.filter(todo => todo.id !== id));
+    setRecentlyChanged(changed => changed.filter(todo => todo.id !== id));
   };
 
   const addTodo = (text: string, type: Type, period = undefined) => {

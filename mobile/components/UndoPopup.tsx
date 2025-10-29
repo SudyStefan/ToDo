@@ -4,9 +4,10 @@ import { styles } from "../styles/styles";
 import { ToDoEntry } from "../../shared/types/ToDoEntry";
 import React, { useEffect, useRef, useState } from "react";
 import { UndoItem } from "./UndoItem";
+import { RecentlyChanged } from "./Root";
 
 type UndoProp = {
-  data: ToDoEntry[], 
+  data: RecentlyChanged[], 
   onUndo: Function, 
   onTimeout: Function,
 }
