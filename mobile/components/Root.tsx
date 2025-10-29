@@ -1,4 +1,4 @@
-import { ToDoEntry, Status } from "../../shared/types/ToDoEntry";
+import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
 import { Animated, Text, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useEffect, useRef, useState } from "react";
@@ -60,8 +60,16 @@ export default function Root({data, API_URL}: RootProp) {
     setRecentlyChanged(recentlyChanged.filter(todo => todo.id !== id));
   };
 
-  const addTodo = (text: string) => {
-    setTodos([...todos, { id: todos.length+1, text, status: Status.Open , creationDate: new Date()}]);
+  const addTodo = (text: string, type: Type, period?: number) => {
+    setTodos([...todos, 
+      { 
+        id: todos.length+1, 
+        text: text, 
+        status: Status.Open, 
+        creationDate: new Date(), 
+        type: type,
+        period: period ? period : undefined,
+      }]);
     setAddViewVisible(false);
   };
 
