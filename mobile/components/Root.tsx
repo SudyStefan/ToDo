@@ -8,10 +8,11 @@ import FloatingPressable from "./FloatingPressable";
 import { AddView } from "./AddView";
 import DonePage from "./DonePage";
 import UndoPopup from "./UndoPopup";
+import PeriodicPage from "./PeriodicPage";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
-  { key: 'rec', title: 'RECURING' },
+  { key: 'periodic', title: 'PERIODIC' },
   { key: 'done', title: 'DONE' },
 ];
 
@@ -73,8 +74,11 @@ export default function Root({data, API_URL}: RootProp) {
     onCheck={(id: number) => changeTodo(id, Status.Done)} />
   );
 
-  const RecRoute = () => (
-    <View/> //To be implemented
+  const PeriodicRoute = () => (
+    <PeriodicPage 
+    data={todos}
+    onCheck={(id: number) => changeTodo(id, Status.Done)}
+    onDelete={(id: number) => changeTodo(id, Status.Deleted)} />
   );
 
   const DoneRoute = () => (
@@ -98,7 +102,7 @@ export default function Root({data, API_URL}: RootProp) {
         navigationState={{ index, routes }}
         renderScene={SceneMap({
           single: SingleRoute,
-          rec: RecRoute,
+          periodic: PeriodicRoute,
           done: DoneRoute,
         })}
         onIndexChange={setIndex}
