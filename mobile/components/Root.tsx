@@ -15,7 +15,6 @@ const routes = [
   { key: 'done', title: 'DONE' },
 ];
 
-
 type RootProp = {
   data: ToDoEntry[], 
   API_URL?: string
@@ -29,15 +28,29 @@ export default function Root({data, API_URL}: RootProp) {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChanged, setRecentlyChanged] = useState<ToDoEntry[]>([]);
   const undoOpacity = useRef(new Animated.Value(0)).current;
+  const clearTimeoutRef = useRef<number>(0);
 
   const changeTodo = (id: number, newStatus: Status) => {
+    undoOpacity.setValue(1);
+
     setRecentlyChanged([...recentlyChanged, todos.find(todo => todo.id === id)!]);
     setTodos(todos.map(todo => todo.id === id ? { ...todo, status: newStatus } : todo));
     
-    wait(3000)
-      .then(() => Animated.timing(undoOpacity, { toValue: 0, duration: 1000, useNativeDriver: true }).start())
-      .then(() => wait(1000))
-      .then(() => setRecentlyChanged([])) 
+    const currentId = ++clearTimeoutRef.current;
+    const runSequence = async () => {
+      await wait(3000);
+      await new Promise<void>((resolve) => {
+        Animated.timing(undoOpacity, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }).start(() => resolve());
+      });
+      if (currentId !== clearTimeoutRef.current) return;
+      setRecentlyChanged([]);
+    }
+    
+    runSequence();
   };
 
   const undoChange = (id: number) => {
