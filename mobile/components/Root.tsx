@@ -27,30 +27,11 @@ export default function Root({data, API_URL}: RootProp) {
   const [todos, setTodos] = useState<ToDoEntry[]>(data);
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChanged, setRecentlyChanged] = useState<ToDoEntry[]>([]);
-  const undoOpacity = useRef(new Animated.Value(0)).current;
-  const clearTimeoutRef = useRef<number>(0);
 
   const changeTodo = (id: number, newStatus: Status) => {
-    undoOpacity.setValue(1);
 
     setRecentlyChanged([...recentlyChanged, todos.find(todo => todo.id === id)!]);
     setTodos(todos.map(todo => todo.id === id ? { ...todo, status: newStatus } : todo));
-    
-    const currentId = ++clearTimeoutRef.current;
-    const runSequence = async () => {
-      await wait(3000);
-      await new Promise<void>((resolve) => {
-        Animated.timing(undoOpacity, {
-          toValue: 0,
-          duration: 2000,
-          useNativeDriver: true,
-        }).start(() => resolve());
-      });
-      if (currentId !== clearTimeoutRef.current) return;
-      setRecentlyChanged([]);
-    }
-    
-    runSequence();
   };
 
   const undoChange = (id: number) => {
@@ -60,7 +41,7 @@ export default function Root({data, API_URL}: RootProp) {
     setRecentlyChanged(recentlyChanged.filter(todo => todo.id !== id));
   };
 
-  const addTodo = (text: string, type: Type, period?: number) => {
+  const addTodo = (text: string, type: Type, period = undefined) => {
     setTodos([...todos, 
       { 
         id: todos.length+1, 
@@ -68,7 +49,7 @@ export default function Root({data, API_URL}: RootProp) {
         status: Status.Open, 
         creationDate: new Date(), 
         type: type,
-        period: period ? period : undefined,
+        period: period,
       }]);
     setAddViewVisible(false);
   };
@@ -97,7 +78,7 @@ export default function Root({data, API_URL}: RootProp) {
     <View style={styles.root} testID="Root">
       <AddView 
         isVisible={addViewVisible} 
-        onAdd={addTodo} 
+        onAdd={(text: string, type: Type) => addTodo(text, type)} 
         onClose={() => setAddViewVisible(false)}/>
       <TabView
         testID="TabView"
@@ -129,7 +110,7 @@ export default function Root({data, API_URL}: RootProp) {
       <UndoPopup 
       data={recentlyChanged} 
       onUndo={(id: number) => undoChange(id)}
-      fadeOpacity={undoOpacity} />
+      onTimeout={(id: number) => setRecentlyChanged(prev => prev.filter(item => item.id !== id))} />
     </View>
   );
 }
