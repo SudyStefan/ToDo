@@ -22,8 +22,6 @@ export default function UndoPopup({data, onUndo, fadeOpacity}: UndoProp) {
   }, [data]);
 
 
-
-
   const UndoItem = ({ text, id }: { text: string, id: number }) => {
     return (
       <View 

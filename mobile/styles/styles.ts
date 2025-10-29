@@ -31,6 +31,7 @@ export const styles = StyleSheet.create({
   itemText: {
     fontSize: height * 0.025,
     color: colors.primaryLight,
+    maxWidth: '75%',
   },
   pressableButton: {
     flex: 1,
