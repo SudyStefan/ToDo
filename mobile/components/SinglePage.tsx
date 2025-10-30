@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
 import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
-import { TodoItem } from "./TodoItem";
+import { ToDoItem } from "./ToDoItem";
 
 type SinglePageProp = {
   data: ToDoEntry[];
@@ -16,7 +16,7 @@ export default function SinglePage({data, onCheck}: SinglePageProp) {
     keyExtractor={item => item.id.toString()}
     contentContainerStyle={styles.singleList}
     renderItem={({ item }) => 
-      <TodoItem 
+      <ToDoItem 
       item={item} 
       onSwipe={onCheck} 
       onPress={onCheck} 

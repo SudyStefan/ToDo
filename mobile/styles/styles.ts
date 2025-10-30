@@ -11,6 +11,7 @@ export const colors = {
   soxred: 'rgb(189, 48, 57)', //color of the boston red sox
   dodgerblue: 'dodgerblue', //color of the la dodgers
   seattlegreen: 'rgb(0, 122, 51)', //color of the seattle mariners
+  giantsorange: 'rgb(254, 90, 29)', //color of the sf giants
 };
 
 export const styles = StyleSheet.create({
@@ -19,8 +20,8 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primaryDark,
   },
   item: {
+    flexGrow: 1,
     backgroundColor: colors.transparent,
-    paddingHorizontal: width * 0.01,
     paddingVertical: height * 0.010,
     borderBottomWidth: 1,
     borderColor: colors.secondaryDark,
@@ -81,7 +82,7 @@ export const styles = StyleSheet.create({
     fontSize: height * 0.025,
   },
   singleList: {
-    flex: 1,
+    flexGrow: 1,
     marginHorizontal: width * 0.07,
     marginTop: height * 0.05,
     justifyContent: 'flex-start',
@@ -111,6 +112,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   undoList: {
+    flexGrow: 1,
     marginHorizontal: width * 0.08,
     borderRadius: width * 0.03,
   },

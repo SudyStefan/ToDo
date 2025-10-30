@@ -23,21 +23,32 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
 
   return (
     <Swipeable 
-    // renderRightActions={() => renderActions("DELETE")}
-    // dragOffsetFromRightEdge={Number.MAX_VALUE}
-    // onSwipeableOpen={() => onSwipe(item.id)} 
-    containerStyle={{ width: '100%' }} 
+    renderRightActions={() => renderActions("DELETE")}
+    dragOffsetFromRightEdge={Number.MAX_VALUE}
+    onSwipeableOpen={() => onSwipe(item.id)} 
+    containerStyle={{flexGrow: 1}}
+    childrenContainerStyle={{...styles.item, borderBottomWidth: 0, paddingHorizontal: 0, paddingVertical: 0, minHeight: '10%'}}
     testID="TodoItem">
-      <View style={{...styles.item, paddingHorizontal: 0}}>
-        <View 
-        testID="ProgBar" 
-        style={{ position: 'absolute', height: "100%", width: `${prog * 100}%`, backgroundColor: prog < 1 ? colors.seattlegreen : colors.soxred }} />
-        <Text style={{...styles.itemText, paddingHorizontal: 20}} numberOfLines={1}>{item.text}</Text>
-        <Text style={{...styles.itemText, paddingHorizontal: 20}}>
-          {prog < 1 ? `DUE IN ${Math.floor(minutesUntilDue / 60 / 24)}d ${Math.floor(minutesUntilDue / 60 % 24)}h ${Math.floor(minutesUntilDue % 60)}m` : 
-          `OVERDUE FOR ${Math.abs(Math.floor(minutesUntilDue / 60 / 24))}d ${Math.abs(Math.floor(minutesUntilDue / 60 % 24))}h ${Math.abs(Math.floor(minutesUntilDue % 60))}m` }
-        </Text>
-      </View>
+      <View 
+      testID="ProgBar" 
+      style={{ 
+        position: 'absolute', 
+        height: '100%', 
+        width: `${prog * 100}%`, 
+        backgroundColor:  
+          prog < 1 
+            ? prog < 0.50 
+              ? colors.seattlegreen 
+              : colors.giantsorange 
+            : colors.soxred 
+      }} />
+      <Text style={{...styles.itemText, paddingHorizontal: 20}} numberOfLines={1}>{item.text}</Text>
+      <Text style={{...styles.itemText, paddingHorizontal: 20}}>
+        { prog < 1 
+            ? `DUE IN ${Math.floor(minutesUntilDue / 60 / 24)}d ${Math.floor(minutesUntilDue / 60 % 24)}h ${Math.floor(minutesUntilDue % 60)}m` 
+            : `OVERDUE FOR ${Math.abs(Math.floor(minutesUntilDue / 60 / 24))}d ${Math.abs(Math.floor(minutesUntilDue / 60 % 24))}h ${Math.abs(Math.floor(minutesUntilDue % 60))}m` 
+        }
+      </Text>
     </Swipeable>
   );
 }

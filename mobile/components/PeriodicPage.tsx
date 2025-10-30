@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
 import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
-import { TodoItem } from "./TodoItem";
+import { ToDoItem } from "./ToDoItem";
 import { PeriodicItem } from "./PeriodicItem";
 
 type PeriodicPageProp = {

@@ -13,7 +13,7 @@ type TodoItemProp = {
   swipeRight?: boolean
 }
 
-export const TodoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight = false}: TodoItemProp) => {
+export const ToDoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight = false}: TodoItemProp) => {
   const renderActions = (text: string) => (
     <View style={styles.deleteContainer}>
       <Text style={styles.deleteText}>{text}</Text>
@@ -27,17 +27,15 @@ export const TodoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight
     renderRightActions={swipeRight ? () => renderActions("DELETE") : undefined}
     dragOffsetFromRightEdge={swipeRight ? undefined : Number.MAX_VALUE}
     onSwipeableOpen={() => onSwipe(item.id)} 
-    containerStyle={{ width: '100%' }} 
+    childrenContainerStyle={styles.item}
     testID="TodoItem">
-      <View style={styles.item}>
-        <Text style={styles.itemText} numberOfLines={1}>{item.text}</Text>
-        <Pressable onPress={() => onPress(item.id)}>
-          <Ionicons 
-          name={item.status === Status.Done ? "checkmark-circle" : "ellipse-outline"} 
-          size={Dimensions.get('window').height * 0.06} 
-          color={item.status === Status.Done ? colors.seattlegreen : colors.soxred} />
-        </Pressable>
-      </View>
+      <Text style={styles.itemText} numberOfLines={1}>{item.text}</Text>
+      <Pressable onPress={() => onPress(item.id)}>
+        <Ionicons 
+        name={item.status === Status.Done ? "checkmark-circle" : "ellipse-outline"} 
+        size={Dimensions.get('window').height * 0.06} 
+        color={item.status === Status.Done ? colors.seattlegreen : colors.soxred} />
+      </Pressable>
     </Swipeable>
   );
 }
