@@ -14,7 +14,7 @@ export default function SinglePage({data, onCheck}: SinglePageProp) {
     <FlatList testID="SinglePage"
     data={data.filter(data => data.type === Type.Single && data.status === Status.Open)}
     keyExtractor={item => item.id.toString()}
-    contentContainerStyle={styles.todoList}
+    contentContainerStyle={styles.singleList}
     renderItem={({ item }) => 
       <TodoItem 
       item={item} 

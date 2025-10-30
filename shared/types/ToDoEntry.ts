@@ -10,7 +10,7 @@ export enum Type {
 };
 
 export enum TimeInSeconds {
-  Day = 60 * 24,
+  Day = 60 * 60 * 24,
   Week = Day * 7,
 }
 

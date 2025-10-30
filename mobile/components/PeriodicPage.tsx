@@ -12,17 +12,17 @@ type PeriodicPageProp = {
 };
 
 export default function PeriodicPage({data, onCheck, onDelete}: PeriodicPageProp) {
+
   return (
     <FlatList
     data={data.filter(data => data.status !== Status.Deleted && data.type === Type.Periodic)}
     keyExtractor={item => item.id.toString()}
-    contentContainerStyle={styles.todoList}
+    contentContainerStyle={styles.periodicList}
     renderItem={({ item }) => 
       <PeriodicItem 
       item={item} 
-      onSwipe={onDelete} 
-      onPress={onCheck}
-      swipeRight/>
+      onSwipe={onCheck} 
+      onPress={onCheck} />
     }/>
   );
 }

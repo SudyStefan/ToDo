@@ -80,9 +80,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: height * 0.025,
   },
-  todoList: {
+  singleList: {
     flex: 1,
     marginHorizontal: width * 0.07,
+    marginTop: height * 0.05,
+    justifyContent: 'flex-start',
+  },
+  periodicList: {
+    flex: 1,
     marginTop: height * 0.05,
     justifyContent: 'flex-start',
   },

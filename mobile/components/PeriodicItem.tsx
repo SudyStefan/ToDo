@@ -12,13 +12,8 @@ type PeriodicItemProp = {
 }
 
 export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
-  const [prog, setProg] = useState<number>(0);
-
-  useEffect(() => {
-    setProg(() => 
-      (new Date().getSeconds() - item.lastChecked!.getSeconds()) / item.period! * 100 <= 100 
-      ? (new Date().getSeconds() - item.lastChecked!.getSeconds()) / item.period! * 100 : 100 );
-  }, []);
+  const prog = Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.period!, 1);
+  const minutesUntilDue =  (item.lastChecked!.getTime()/1000 + item.period! - Date.now()/1000) / 60;
 
   const renderActions = (text: string) => (
     <View style={styles.deleteContainer}>
@@ -28,16 +23,20 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
 
   return (
     <Swipeable 
-    renderRightActions={() => renderActions("DELETE")}
-    dragOffsetFromRightEdge={Number.MAX_VALUE}
-    onSwipeableOpen={() => onSwipe(item.id)} 
+    // renderRightActions={() => renderActions("DELETE")}
+    // dragOffsetFromRightEdge={Number.MAX_VALUE}
+    // onSwipeableOpen={() => onSwipe(item.id)} 
     containerStyle={{ width: '100%' }} 
     testID="TodoItem">
-      <View style={styles.item}>
+      <View style={{...styles.item, paddingHorizontal: 0}}>
         <View 
         testID="ProgBar" 
-        style={{position: 'relative', width: 500, backgroundColor: colors.soxred }} />
-        <Text style={styles.itemText} numberOfLines={1}>{item.text}</Text>
+        style={{ position: 'absolute', height: "100%", width: `${prog * 100}%`, backgroundColor: prog < 1 ? colors.seattlegreen : colors.soxred }} />
+        <Text style={{...styles.itemText, paddingHorizontal: 20}} numberOfLines={1}>{item.text}</Text>
+        <Text style={{...styles.itemText, paddingHorizontal: 20}}>
+          {prog < 1 ? `DUE IN ${Math.floor(minutesUntilDue / 60 / 24)}d ${Math.floor(minutesUntilDue / 60 % 24)}h ${Math.floor(minutesUntilDue % 60)}m` : 
+          `OVERDUE FOR ${Math.abs(Math.floor(minutesUntilDue / 60 / 24))}d ${Math.abs(Math.floor(minutesUntilDue / 60 % 24))}h ${Math.abs(Math.floor(minutesUntilDue % 60))}m` }
+        </Text>
       </View>
     </Swipeable>
   );

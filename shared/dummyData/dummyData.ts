@@ -12,8 +12,8 @@ export const DummyData: ToDoEntry[] = [
   { id: 9, text: 'Cook dinner', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Single },
   { id: 10, text: 'asdadsasdadsasdasdasdadasdasd', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Single },
   
-  { id: 11, text: 'Küche', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date(), period: TimeInSeconds.Week * 2 },
-  { id: 12, text: 'Dusche', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date(), period: TimeInSeconds.Week * 3 },
-  { id: 13, text: 'Klo', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date(), period: TimeInSeconds.Week },
-  { id: 14, text: 'Gang', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date(), period: TimeInSeconds.Week * 4 },
+  { id: 11, text: 'Küche', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date("2025-10-20"), period: TimeInSeconds.Week * 2 },
+  { id: 12, text: 'Dusche', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date("2025-10-20"), period: TimeInSeconds.Week * 3 },
+  { id: 13, text: 'Klo', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date("2025-10-20"), period: TimeInSeconds.Week },
+  { id: 14, text: 'Gang', status: Status.Done, creationDate: new Date("2025-10-01"), type: Type.Periodic, lastChecked: new Date("2025-10-20"), period: TimeInSeconds.Week * 4 },
 ];
