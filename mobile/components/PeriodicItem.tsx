@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions, Animated } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
 
 type PeriodicItemProp = {
@@ -12,8 +11,17 @@ type PeriodicItemProp = {
 }
 
 export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
-  const prog = Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.period!, 1);
-  const minutesUntilDue =  (item.lastChecked!.getTime()/1000 + item.period! - Date.now()/1000) / 60;
+  const [prog, setProg] = useState(0);
+  const [minutesUntilDue, setMinutesUntilDue] = useState(0);
+  
+  useEffect(() => {
+    try {
+    setProg(Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.period!, 1));
+    setMinutesUntilDue((item.lastChecked!.getTime()/1000 + item.period! - Date.now()/1000) / 60);
+    } catch {
+      console.log("Error calculating periodic progress");
+    }
+  }, []);
 
   const renderActions = (text: string) => (
     <View style={styles.deleteContainer}>

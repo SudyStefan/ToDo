@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { ToDoEntry } from "../../../shared/types/ToDoEntry.js";
-import { DummyData } from "../../../shared/dummyData/dummyData.js";
-import { toDoRepo } from "../repo.js";
+import { ToDoEntry } from "../../../shared/types/ToDoEntry";
+import { toDoRepo } from "../repo";
 
 export const getEntries = (req: Request, res: Response) => {
   const entries = toDoRepo.get();

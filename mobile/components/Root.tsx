@@ -9,17 +9,13 @@ import { AddView } from "./AddView";
 import DonePage from "./DonePage";
 import UndoPopup from "./UndoPopup";
 import PeriodicPage from "./PeriodicPage";
+import axios from "axios";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
   { key: 'periodic', title: 'PERIODIC' },
   { key: 'done', title: 'DONE' },
 ];
-
-type RootProp = {
-  data: ToDoEntry[], 
-  API_URL?: string
-};
 
 export type RecentlyChanged = {
   id: number,
@@ -28,11 +24,15 @@ export type RecentlyChanged = {
   currentStatus: ToDoStatus,
 };
 
+type RootProp = {
+  todos: ToDoEntry[],
+  setTodos: React.Dispatch<React.SetStateAction<ToDoEntry[]>>
+}
+
 export const wait = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms));
 
-export default function Root({data, API_URL}: RootProp) {
-  const [todos, setTodos] = useState<ToDoEntry[]>(data);
+export default function Root({todos, setTodos}: RootProp) {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChanged, setRecentlyChanged] = useState<RecentlyChanged[]>([]);
 

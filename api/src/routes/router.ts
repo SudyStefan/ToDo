@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getEntries, addEntry, updateEntry, deleteEntry } from "../controllers/controller.js";
+import { getEntries, addEntry, updateEntry, deleteEntry } from "../controllers/controller";
 
 export const todosRouter = Router();
 
