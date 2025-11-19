@@ -1,8 +1,7 @@
 import { View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { styles } from "../styles/styles";
-import { ToDoEntry } from "../../shared/types/ToDoEntry";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { UndoItem } from "./UndoItem";
 import { RecentlyChanged } from "./Root";
 

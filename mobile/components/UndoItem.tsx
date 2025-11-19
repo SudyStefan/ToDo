@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated } from "react-native";
 import { styles } from "../styles/styles";
-import { wait } from "./Root";
 
 type UndoItemProp = {
   text: string;
@@ -9,6 +8,9 @@ type UndoItemProp = {
   onUndo: Function;
   onTimeout: Function;
 };
+
+const wait = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms));
 
 export const UndoItem = ({ text, id, onUndo, onTimeout }: UndoItemProp) => {
     const itemOpacity = useRef(new Animated.Value(0)).current;

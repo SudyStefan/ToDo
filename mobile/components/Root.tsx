@@ -1,7 +1,7 @@
 import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
-import { Animated, Text, useWindowDimensions, View } from "react-native";
+import { useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import SinglePage from "./SinglePage";
 import { styles, colors } from "../styles/styles";
 import FloatingPressable from "./FloatingPressable";
@@ -10,6 +10,7 @@ import DonePage from "./DonePage";
 import UndoPopup from "./UndoPopup";
 import PeriodicPage from "./PeriodicPage";
 import axios from "axios";
+import { postToDo } from "../service/ToDoService";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
@@ -28,9 +29,6 @@ type RootProp = {
   todos: ToDoEntry[],
   setTodos: React.Dispatch<React.SetStateAction<ToDoEntry[]>>
 }
-
-export const wait = (ms: number) =>
-  new Promise(resolve => setTimeout(resolve, ms));
 
 export default function Root({todos, setTodos}: RootProp) {
   const [addViewVisible, setAddViewVisible] = useState(false);
@@ -55,35 +53,40 @@ export default function Root({todos, setTodos}: RootProp) {
     setRecentlyChanged(changed => changed.filter(todo => todo.id !== id));
   };
 
-  const addTodo = (text: string, type: ToDoType, period = undefined) => {
-    setTodos([...todos, 
-      { 
-        id: todos.length+1, 
+  const addTodo = async (text: string, type: ToDoType, period = undefined) => {
+    const todo: ToDoEntry = {
+        id: 0, 
         text: text, 
         status: ToDoStatus.Open, 
         creationDate: new Date(), 
         type: type,
         period: period,
-      }]);
+        deleted: false
+    }
+
+    postToDo(todo)
+      .then(newTodo => setTodos([...todos, newTodo]))
+      .catch(err => console.error("Failed to add todo:", err));
+    
     setAddViewVisible(false);
   };
 
   const SingleRoute = () => (
     <SinglePage 
-    data={todos} 
+    data={todos.filter(item => item.type === ToDoType.Single && item.status === ToDoStatus.Open)} 
     onCheck={(id: number) => changeTodo(id, ToDoStatus.Done)} />
   );
 
   const PeriodicRoute = () => (
     <PeriodicPage 
-    data={todos}
+    data={todos.filter(item => item.type === ToDoType.Periodic)}
     onCheck={(id: number) => changeTodo(id, ToDoStatus.Done)}
     onDelete={(id: number) => changeTodo(id, ToDoStatus.Deleted)} />
   );
 
   const DoneRoute = () => (
     <DonePage 
-    data={todos} 
+    data={todos.filter(item => item.type === ToDoType.Single && item.status === ToDoStatus.Done)} 
     onUncheck={(id: number) => changeTodo(id, ToDoStatus.Open)} 
     onDelete={(id: number) => changeTodo(id, ToDoStatus.Deleted)} />
   );

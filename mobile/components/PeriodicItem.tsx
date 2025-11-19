@@ -16,10 +16,10 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
   
   useEffect(() => {
     try {
-    setProg(Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.period!, 1));
-    setMinutesUntilDue((item.lastChecked!.getTime()/1000 + item.period! - Date.now()/1000) / 60);
-    } catch {
-      console.log("Error calculating periodic progress");
+      setProg(Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.period!, 1));
+      setMinutesUntilDue((item.lastChecked!.getTime()/1000 + item.period! - Date.now()/1000) / 60);
+    } catch (err) {
+      console.error(`${err} - lastChecked type: ${typeof(item.lastChecked)}`);
     }
   }, []);
 

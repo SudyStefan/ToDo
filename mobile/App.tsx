@@ -3,25 +3,21 @@ import Root from "./components/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ToDoEntry } from "../shared/types/ToDoEntry";
 import { ActivityIndicator, View, Text } from "react-native";
-import axios from "axios";
+import { getToDos } from "./service/ToDoService";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<ToDoEntry[]>([]);
 
   useEffect(() => {
-    console.log("Fetching data");
-    initialFetch();
+    getToDos()
+      .then(fetchedTodos => setTodos(fetchedTodos))
+      .catch(err => console.error("Error fetching todos:", err))
+      .finally(() => {
+        setLoading(false);
+        console.log(`Fetched ${todos.length} todos`);
+      });
   }, []);
-
-  const initialFetch = async () => {
-    try {
-      const response = await axios.get("http://localhost:4000/todo");
-      setTodos(response.data as ToDoEntry[]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (

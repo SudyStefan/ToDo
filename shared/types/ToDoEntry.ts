@@ -22,4 +22,32 @@ export interface ToDoEntry {
   type: ToDoType;
   lastChecked?: Date;
   period?: number; 
+  deleted: boolean;
+};
+
+export interface ToDoEntryDTO {
+  id: number,
+  text: string,
+  status: number, 
+  creationDate: string,
+  type: number,
+  lastChecked?: string,
+  period?: number,
+  deleted: boolean,
+}
+
+export const fromDTO = (dto: ToDoEntryDTO): ToDoEntry => {
+  return {
+    ...dto,
+    creationDate: new Date(dto.creationDate),
+    lastChecked: dto.lastChecked ? new Date(dto.lastChecked) : undefined,
+  }
+};
+
+export const toDTO = (entry: ToDoEntry): ToDoEntryDTO => {
+  return {
+    ...entry,
+    creationDate: entry.creationDate.toISOString(),
+    lastChecked: entry.lastChecked ? entry.lastChecked.toISOString() : undefined,
+  }
 };
