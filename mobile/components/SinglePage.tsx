@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
-import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
+import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { ToDoItem } from "./ToDoItem";
 
@@ -12,7 +12,7 @@ type SinglePageProp = {
 export default function SinglePage({data, onCheck}: SinglePageProp) {
   return (
     <FlatList testID="SinglePage"
-    data={data.filter(data => data.type === Type.Single && data.status === Status.Open)}
+    data={data.filter(data => data.type === ToDoType.Single && data.status === ToDoStatus.Open)}
     keyExtractor={item => item.id.toString()}
     contentContainerStyle={styles.singleList}
     renderItem={({ item }) => 

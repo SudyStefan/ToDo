@@ -1,10 +1,10 @@
-export enum Status {
+export enum ToDoStatus {
   Open,
   Done,
   Deleted,
 };
 
-export enum Type {
+export enum ToDoType {
   Single,
   Periodic,
 };
@@ -17,9 +17,9 @@ export enum TimeInSeconds {
 export interface ToDoEntry {
   id: number;
   text: string;
-  status: Status;
+  status: ToDoStatus;
   creationDate: Date;
-  type: Type;
+  type: ToDoType;
   lastChecked?: Date;
   period?: number; 
 };

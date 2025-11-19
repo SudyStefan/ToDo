@@ -1,4 +1,4 @@
-import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
+import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
 import { Animated, Text, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useEffect, useRef, useState } from "react";
@@ -24,8 +24,8 @@ type RootProp = {
 export type RecentlyChanged = {
   id: number,
   text: string,
-  prevStatus: Status,
-  currentStatus: Status,
+  prevStatus: ToDoStatus,
+  currentStatus: ToDoStatus,
 };
 
 export const wait = (ms: number) =>
@@ -36,7 +36,7 @@ export default function Root({data, API_URL}: RootProp) {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChanged, setRecentlyChanged] = useState<RecentlyChanged[]>([]);
 
-  const changeTodo = (id: number, newStatus: Status) => {
+  const changeTodo = (id: number, newStatus: ToDoStatus) => {
     let todo = todos.find(item => item.id === id)!;
     setRecentlyChanged([...recentlyChanged, 
       { 
@@ -55,12 +55,12 @@ export default function Root({data, API_URL}: RootProp) {
     setRecentlyChanged(changed => changed.filter(todo => todo.id !== id));
   };
 
-  const addTodo = (text: string, type: Type, period = undefined) => {
+  const addTodo = (text: string, type: ToDoType, period = undefined) => {
     setTodos([...todos, 
       { 
         id: todos.length+1, 
         text: text, 
-        status: Status.Open, 
+        status: ToDoStatus.Open, 
         creationDate: new Date(), 
         type: type,
         period: period,
@@ -71,21 +71,21 @@ export default function Root({data, API_URL}: RootProp) {
   const SingleRoute = () => (
     <SinglePage 
     data={todos} 
-    onCheck={(id: number) => changeTodo(id, Status.Done)} />
+    onCheck={(id: number) => changeTodo(id, ToDoStatus.Done)} />
   );
 
   const PeriodicRoute = () => (
     <PeriodicPage 
     data={todos}
-    onCheck={(id: number) => changeTodo(id, Status.Done)}
-    onDelete={(id: number) => changeTodo(id, Status.Deleted)} />
+    onCheck={(id: number) => changeTodo(id, ToDoStatus.Done)}
+    onDelete={(id: number) => changeTodo(id, ToDoStatus.Deleted)} />
   );
 
   const DoneRoute = () => (
     <DonePage 
     data={todos} 
-    onUncheck={(id: number) => changeTodo(id, Status.Open)} 
-    onDelete={(id: number) => changeTodo(id, Status.Deleted)} />
+    onUncheck={(id: number) => changeTodo(id, ToDoStatus.Open)} 
+    onDelete={(id: number) => changeTodo(id, ToDoStatus.Deleted)} />
   );
 
   const layout = useWindowDimensions();
@@ -95,7 +95,7 @@ export default function Root({data, API_URL}: RootProp) {
     <View style={styles.root} testID="Root">
       <AddView 
         isVisible={addViewVisible} 
-        onAdd={(text: string, type: Type) => addTodo(text, type)} 
+        onAdd={(text: string, type: ToDoType) => addTodo(text, type)} 
         onClose={() => setAddViewVisible(false)}/>
       <TabView
         testID="TabView"

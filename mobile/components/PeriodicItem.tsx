@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet, Dimensions, Animated } from "react-n
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { ToDoEntry, Status } from '../../shared/types/ToDoEntry';
+import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
 
 type PeriodicItemProp = {
   item: ToDoEntry,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
-import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
+import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { ToDoItem } from "./ToDoItem";
 import { PeriodicItem } from "./PeriodicItem";
@@ -15,7 +15,7 @@ export default function PeriodicPage({data, onCheck, onDelete}: PeriodicPageProp
 
   return (
     <FlatList
-    data={data.filter(data => data.status !== Status.Deleted && data.type === Type.Periodic)}
+    data={data.filter(data => data.status !== ToDoStatus.Deleted && data.type === ToDoType.Periodic)}
     keyExtractor={item => item.id.toString()}
     contentContainerStyle={styles.periodicList}
     renderItem={({ item }) => 

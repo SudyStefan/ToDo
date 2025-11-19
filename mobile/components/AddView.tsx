@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, Modal} from "react-native";
 import { styles, colors } from "../styles/styles";
 import { TextInput } from 'react-native-gesture-handler';
-import { Type } from '../../shared/types/ToDoEntry';
+import { ToDoType } from '../../shared/types/ToDoEntry';
 
 type AddViewProps = {
   isVisible: boolean,
@@ -35,7 +35,7 @@ export const AddView = ({isVisible, onAdd, onClose}: AddViewProps) => {
         value={text} 
         onChangeText={setText} />
         <View style={{flexDirection:"row", marginLeft: 10}}>
-          <Pressable onPress={() => {onAdd(text, Type.Single); initClose()}} style={styles.pressableButton}>
+          <Pressable onPress={() => {onAdd(text, ToDoType.Single); initClose()}} style={styles.pressableButton}>
             <Text style={styles.defaultText}>ADD</Text>
           </Pressable>
           <Pressable onPress={() => initClose()} style={{...styles.pressableButton, backgroundColor: colors.soxred}}>

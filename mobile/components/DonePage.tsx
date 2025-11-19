@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
-import { ToDoEntry, Status, Type } from "../../shared/types/ToDoEntry";
+import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { ToDoItem } from "./ToDoItem";
 
@@ -13,7 +13,7 @@ type DonePageProp = {
 export default function DonePage({data, onUncheck, onDelete}: DonePageProp) {
   return (
     <FlatList
-    data={data.filter(data => data.type === Type.Single && data.status === Status.Done)}
+    data={data.filter(data => data.type === ToDoType.Single && data.status === ToDoStatus.Done)}
     keyExtractor={item => item.id.toString()}
     style={{flex: 1}}
     contentContainerStyle={styles.singleList}

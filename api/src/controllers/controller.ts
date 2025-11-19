@@ -1,18 +1,28 @@
 import { Request, Response } from "express";
 import { ToDoEntry } from "../../../shared/types/ToDoEntry.js";
+import { DummyData } from "../../../shared/dummyData/dummyData.js";
+import { toDoRepo } from "../repo.js";
 
-
-let entries: ToDoEntry[] = [
-  { id: 1, text: "Sample ToDo", done: false },
-  { id: 2, text: "Another ToDo", done: true }
-];
-
-export const getList = (req: Request, res: Response) => {
+export const getEntries = (req: Request, res: Response) => {
+  const entries = toDoRepo.get();
   res.json(entries);
-};
+}
 
-export const createItem = (req: Request, res: Response) => {
-  const newItem: ToDoEntry = { id: entries.length + 1, text: req.body.name, done: false };
-  entries.push(newItem);
-  res.status(201).json(newItem);
-};
+export const addEntry = (req: Request, res: Response) => {
+  const newEntry: ToDoEntry = req.body;
+  toDoRepo.add(newEntry);
+  res.status(201).json(newEntry);
+}
+
+export const updateEntry = (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const updatedEntry: ToDoEntry = req.body;
+  toDoRepo.update(updatedEntry);
+  res.json(updatedEntry);
+}
+
+export const deleteEntry = (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  toDoRepo.remove(id);
+  res.sendStatus(204);
+}

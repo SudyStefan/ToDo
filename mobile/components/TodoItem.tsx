@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet, Dimensions } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { ToDoEntry, Status } from '../../shared/types/ToDoEntry';
+import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
 
 type TodoItemProp = {
   item: ToDoEntry,
@@ -32,9 +32,9 @@ export const ToDoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight
       <Text style={styles.itemText} numberOfLines={1}>{item.text}</Text>
       <Pressable onPress={() => onPress(item.id)}>
         <Ionicons 
-        name={item.status === Status.Done ? "checkmark-circle" : "ellipse-outline"} 
+        name={item.status === ToDoStatus.Done ? "checkmark-circle" : "ellipse-outline"} 
         size={Dimensions.get('window').height * 0.06} 
-        color={item.status === Status.Done ? colors.seattlegreen : colors.soxred} />
+        color={item.status === ToDoStatus.Done ? colors.seattlegreen : colors.soxred} />
       </Pressable>
     </Swipeable>
   );
