@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { ToDoEntryDTO, ToDoType, ToDoStatus } from "./models/ToDoDTO.js";
 import { ToDoSchema } from "./models/ToDoSchema.js";
+import { dbAccount } from "./dbAccount.js";
 
-await mongoose.connect("mongodb+srv://BergMichel:JQtPHPxyNV6RzHD@tododata.zndg1ff.mongodb.net/?appName=TodoData");
+await mongoose.connect(`mongodb+srv://${dbAccount.user}:${dbAccount.password}@tododata.zndg1ff.mongodb.net/?appName=TodoData`);
 const ToDoModel = mongoose.model("ToDoEntry", ToDoSchema);
 
 const fromEntityToDTO = (entity: any): ToDoEntryDTO => ({
