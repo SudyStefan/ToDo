@@ -16,7 +16,7 @@ export default function PeriodicPage({data, onCheck, onDelete}: PeriodicPageProp
   return (
     <FlatList
     data={data.filter(data => data.status !== ToDoStatus.Deleted && data.type === ToDoType.Periodic)}
-    keyExtractor={item => item.id.toString()}
+    keyExtractor={item => item._id}
     contentContainerStyle={styles.periodicList}
     renderItem={({ item }) => 
       <PeriodicItem 

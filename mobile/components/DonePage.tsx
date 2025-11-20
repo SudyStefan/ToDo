@@ -14,7 +14,7 @@ export default function DonePage({data, onUncheck, onDelete}: DonePageProp) {
   return (
     <FlatList
     data={data.filter(data => data.type === ToDoType.Single && data.status === ToDoStatus.Done)}
-    keyExtractor={item => item.id.toString()}
+    keyExtractor={item => item._id}
     style={{flex: 1}}
     contentContainerStyle={styles.singleList}
     renderItem={({ item }) => 

@@ -15,7 +15,7 @@ export enum TimeInSeconds {
 }
 
 export interface ToDoEntry {
-  _id: number;
+  _id: string;
   text: string;
   status: ToDoStatus;
   creationDate: Date;
@@ -26,7 +26,7 @@ export interface ToDoEntry {
 };
 
 export interface ToDoEntryDTO {
-  _id: number,
+  _id: string,
   text: string,
   status: number, 
   creationDate: string,

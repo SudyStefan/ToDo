@@ -19,7 +19,7 @@ const routes = [
 ];
 
 export type RecentlyChanged = {
-  id: number,
+  id: string,
   text: string,
   prevStatus: ToDoStatus,
   currentStatus: ToDoStatus,
@@ -34,20 +34,20 @@ export default function Root({todos, setTodos}: RootProp) {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [recentlyChanged, setRecentlyChanged] = useState<RecentlyChanged[]>([]);
 
-  const changeTodo = (id: number, newStatus: ToDoStatus) => {
-    let todo = todos.find(item => item.id === id)!;
+  const changeTodo = (id: string, newStatus: ToDoStatus) => {
+    let todo = todos.find(item => item._id === id)!;
     setRecentlyChanged([...recentlyChanged, 
       { 
-        id: todo.id, 
+        id: todo._id, 
         text: todo.text, 
         prevStatus: todo.status, 
         currentStatus: newStatus 
       }]);
-    setTodos(todos.map(item => item.id === id ? { ...item, status: newStatus } : item));
+    setTodos(todos.map(item => item._id === id ? { ...item, status: newStatus } : item));
   };
 
-  const undoChange = (id: number) => {
-    setTodos(items => items.map(todo => todo.id === id ? 
+  const undoChange = (id: string) => {
+    setTodos(items => items.map(todo => todo._id === id ? 
       { ...todo, status: recentlyChanged.find(item => item.id === id)!.prevStatus } 
       : todo ));
     setRecentlyChanged(changed => changed.filter(todo => todo.id !== id));
@@ -55,7 +55,7 @@ export default function Root({todos, setTodos}: RootProp) {
 
   const addTodo = async (text: string, type: ToDoType, period = undefined) => {
     const todo: ToDoEntry = {
-        id: 0, 
+        _id: null as any, 
         text: text, 
         status: ToDoStatus.Open, 
         creationDate: new Date(), 
@@ -74,21 +74,21 @@ export default function Root({todos, setTodos}: RootProp) {
   const SingleRoute = () => (
     <SinglePage 
     data={todos.filter(item => item.type === ToDoType.Single && item.status === ToDoStatus.Open)} 
-    onCheck={(id: number) => changeTodo(id, ToDoStatus.Done)} />
+    onCheck={(id: string) => changeTodo(id, ToDoStatus.Done)} />
   );
 
   const PeriodicRoute = () => (
     <PeriodicPage 
     data={todos.filter(item => item.type === ToDoType.Periodic)}
-    onCheck={(id: number) => changeTodo(id, ToDoStatus.Done)}
-    onDelete={(id: number) => changeTodo(id, ToDoStatus.Deleted)} />
+    onCheck={(id: string) => changeTodo(id, ToDoStatus.Done)}
+    onDelete={(id: string) => changeTodo(id, ToDoStatus.Deleted)} />
   );
 
   const DoneRoute = () => (
     <DonePage 
     data={todos.filter(item => item.type === ToDoType.Single && item.status === ToDoStatus.Done)} 
-    onUncheck={(id: number) => changeTodo(id, ToDoStatus.Open)} 
-    onDelete={(id: number) => changeTodo(id, ToDoStatus.Deleted)} />
+    onUncheck={(id: string) => changeTodo(id, ToDoStatus.Open)} 
+    onDelete={(id: string) => changeTodo(id, ToDoStatus.Deleted)} />
   );
 
   const layout = useWindowDimensions();
@@ -129,8 +129,8 @@ export default function Root({todos, setTodos}: RootProp) {
       </View>
       <UndoPopup 
       data={recentlyChanged} 
-      onUndo={(id: number) => undoChange(id)}
-      onTimeout={(id: number) => setRecentlyChanged(prev => prev.filter(item => item.id !== id))} />
+      onUndo={(id: string) => undoChange(id)}
+      onTimeout={(id: string) => setRecentlyChanged(prev => prev.filter(item => item.id !== id))} />
     </View>
   );
 }

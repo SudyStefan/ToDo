@@ -4,7 +4,7 @@ import { styles } from "../styles/styles";
 
 type UndoItemProp = {
   text: string;
-  id: number;
+  id: string;
   onUndo: Function;
   onTimeout: Function;
 };

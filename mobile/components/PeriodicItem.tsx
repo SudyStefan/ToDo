@@ -33,7 +33,7 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
     <Swipeable 
     renderRightActions={() => renderActions("DELETE")}
     dragOffsetFromRightEdge={Number.MAX_VALUE}
-    onSwipeableOpen={() => onSwipe(item.id)} 
+    onSwipeableOpen={() => onSwipe(item._id)} 
     containerStyle={{flexGrow: 1}}
     childrenContainerStyle={{...styles.item, borderBottomWidth: 0, paddingHorizontal: 0, paddingVertical: 0, minHeight: '10%'}}
     testID="TodoItem">

@@ -26,11 +26,11 @@ export const ToDoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight
     dragOffsetFromLeftEdge={swipeLeft ? undefined : Number.MAX_VALUE}
     renderRightActions={swipeRight ? () => renderActions("DELETE") : undefined}
     dragOffsetFromRightEdge={swipeRight ? undefined : Number.MAX_VALUE}
-    onSwipeableOpen={() => onSwipe(item.id)} 
+    onSwipeableOpen={() => onSwipe(item._id)} 
     childrenContainerStyle={styles.item}
     testID="TodoItem">
       <Text style={styles.itemText} numberOfLines={1}>{item.text}</Text>
-      <Pressable onPress={() => onPress(item.id)}>
+      <Pressable onPress={() => onPress(item._id)}>
         <Ionicons 
         name={item.status === ToDoStatus.Done ? "checkmark-circle" : "ellipse-outline"} 
         size={Dimensions.get('window').height * 0.06} 
