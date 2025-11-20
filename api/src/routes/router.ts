@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { getEntries, addEntry, updateEntry, deleteEntry } from "../controllers/controller.js";
+import { getAllEntries, getEntry, addEntry, updateEntry, deleteEntry } from "../controllers/controller.js";
 
 export const todosRouter = Router();
 
-todosRouter.get("/", getEntries);
+todosRouter.get("/", getAllEntries);
+
+todosRouter.get("/:id", getEntry);
 
 todosRouter.post("/", addEntry);
 

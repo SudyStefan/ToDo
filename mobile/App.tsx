@@ -14,8 +14,8 @@ export default function App() {
       .then(fetchedTodos => setTodos(fetchedTodos))
       .catch(err => console.error("Error fetching todos:", err))
       .finally(() => {
-        setLoading(false);
         console.log(`Fetched ${todos.length} todos`);
+        setLoading(false);
       });
   }, []);
 

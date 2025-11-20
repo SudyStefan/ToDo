@@ -1,18 +1,17 @@
 import mongoose from "mongoose";
-import { DummyData } from "./shared/dummyData/dummyData.js";
 import { ToDoType, ToDoStatus } from "./shared/types/ToDoEntry.js";
 await mongoose.connect("mongodb+srv://BergMichel:JQtPHPxyNV6RzHD@tododata.zndg1ff.mongodb.net/?appName=TodoData");
 const ToDoSchema = new mongoose.Schema({
     text: { type: String, required: true },
     status: {
         type: Number,
-        enum: Object.values(ToDoStatus),
+        enum: Object.values(ToDoStatus).filter(v => typeof v === 'number'),
         required: true
     },
     creationDate: { type: Date, required: true },
     type: {
         type: Number,
-        enum: Object.values(ToDoType),
+        enum: Object.values(ToDoType).filter(v => typeof v === 'number'),
         required: true
     },
     lastChecked: { type: Date },
@@ -61,8 +60,4 @@ class ToDoRepo {
         });
     }
 }
-console.log("Seeding database with dummy data...");
-await ToDoModel.insertMany(DummyData.map(toEntity));
-await mongoose.disconnect();
-console.log("Database seeding completed.");
 export const toDoRepo = new ToDoRepo();

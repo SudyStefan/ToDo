@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { DummyData } from "./shared/dummyData/dummyData.js";
 import { ToDoEntry, ToDoType, ToDoStatus } from "./shared/types/ToDoEntry.js";
 
 await mongoose.connect("mongodb+srv://BergMichel:JQtPHPxyNV6RzHD@tododata.zndg1ff.mongodb.net/?appName=TodoData");
@@ -9,13 +8,13 @@ const ToDoSchema = new mongoose.Schema(
     text: { type: String, required: true },
     status: { 
       type: Number, 
-      enum: Object.values(ToDoStatus),
+      enum: Object.values(ToDoStatus).filter(v => typeof v === 'number'),
       required: true 
     },
     creationDate: { type: Date, required: true },
     type: { 
       type: Number, 
-      enum: Object.values(ToDoType),
+      enum: Object.values(ToDoType).filter(v => typeof v === 'number'),
       required: true 
     },
     lastChecked: { type: Date },
@@ -27,18 +26,19 @@ const ToDoSchema = new mongoose.Schema(
   }
 );
 
-const fromEntity = (entity: any): ToDoEntry => ({
-  _id: entity._id,
+const fromEntityToDTO = (entity: any): ToDoEntry => ({
+  _id: entity._id.toString(),
   text: entity.text,
   status: entity.status,
-  creationDate: entity.creationDate,
+  creationDate: entity.creationDate.toISOString(),
   type: entity.type,
-  lastChecked: entity.lastChecked,
+  lastChecked: entity.lastChecked.toISOString(),
   period: entity.period,
   deleted: entity.deleted,
 })
 
-const toEntity = (entry: ToDoEntry): any => ({
+const toEntityFromDTO = (entry: ToDoEntry): any => ({
+  _id: new mongoose.Types.ObjectId(entry._id),
   text: entry.text,
   status: entry.status,
   creationDate: entry.creationDate,
@@ -53,28 +53,23 @@ const ToDoModel = mongoose.model("ToDoEntry", ToDoSchema);
 class ToDoRepo {
   getAll(): Promise<ToDoEntry[]> {
     console.log("Fetching all entries from database");
-    return ToDoModel.find().then(entities => entities.map(fromEntity));
+    return ToDoModel.find().then(entities => entities.map(fromEntityToDTO));
   };
 
   get(id: number): Promise<ToDoEntry | null> {
     console.log(`Fetching entry with id ${id} from database`);
-    return ToDoModel.findById(id).then(entity => entity ? fromEntity(entity) : null);
+    return ToDoModel.findById(id).then(entity => entity ? fromEntityToDTO(entity) : null);
   }
 
   add(newEntry: ToDoEntry): Promise<ToDoEntry> {
-    return new ToDoModel(toEntity(newEntry))
+    return new ToDoModel(toEntityFromDTO(newEntry))
       .save()
-      .then(saved => fromEntity(saved))
+      .then(saved => fromEntityToDTO(saved))
       .catch(err => {
         console.error("Error adding new entry:", err);
         throw err;
       });
     }
 }
-
-console.log("Seeding database with dummy data...");
-await ToDoModel.insertMany(DummyData.map(toEntity))
-await mongoose.disconnect();
-console.log("Database seeding completed.");
 
 export const toDoRepo = new ToDoRepo();
