@@ -9,15 +9,13 @@ import { AddView } from "./AddView";
 import { DonePage } from "./DonePage";
 import { InfoPopup, PopupItem } from "./InfoPopup";
 import { PeriodicPage } from "./PeriodicPage";
-import { postToDo } from "../service/ToDoService";
+import { ToDoService } from "../service/ToDoService";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
   { key: 'periodic', title: 'PERIODIC' },
   { key: 'done', title: 'DONE' },
 ];
-
-
 
 export type RootProp = {
   todos: ToDoEntry[],
@@ -29,7 +27,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
 
   const changeTodo = (id: string, newStatus: ToDoStatus) => {
-    let todo = todos.find(item => item._id === id)!;
+    const todo = todos.find(item => item._id === id)!;
     setPopupItems([...popupItems, 
       { 
         id: todo._id, 
@@ -43,9 +41,15 @@ export const Root = ({todos, setTodos}: RootProp) => {
   const undoChange = (id: string) => {
     setTodos(items => items.map(todo => todo._id === id ? 
       { ...todo, status: popupItems.find(item => item.id === id)!.prevStatus! } 
-      : todo ));
+        : todo ));
     setPopupItems(changed => changed.filter(todo => todo.id !== id));
   };
+
+  const syncOnTimeout = (id: string) => {
+    ToDoService.putTodo(todos.find(item => item._id === id)!)
+          .then(() => setPopupItems(prev => prev.filter(item => item.id !== id)))
+          .catch(err => console.error(`Failed to sync: ${err}`));
+    };
 
   const addTodo = async (text: string, type: ToDoType, period = undefined) => {
     const todo: ToDoEntry = {
@@ -55,13 +59,13 @@ export const Root = ({todos, setTodos}: RootProp) => {
         creationDate: new Date(), 
         type: type,
         period: period,
-        deleted: false
     }
 
-    postToDo(todo)
+    ToDoService.postTodo(todo)
       .then(newTodo => setTodos([...todos, newTodo]))
       .catch(err => {
         console.error("Failed to add todo:", err);
+        //Implement adding error to popup
       });
     
     setAddViewVisible(false);
@@ -126,7 +130,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
       <InfoPopup 
       data={popupItems} 
       onUndo={(id: string) => undoChange(id)}
-      onTimeout={(id: string) => setPopupItems(prev => prev.filter(item => item.id !== id))} />
+      onTimeout={(id: string) => syncOnTimeout(id)} />
     </View>
   );
 }

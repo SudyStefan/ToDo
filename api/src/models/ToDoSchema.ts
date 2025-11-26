@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ToDoStatus, ToDoType } from "./ToDoDTO.js";
+import { ToDoStatus, ToDoType } from "./todoDTO.js";
 
 export const ToDoSchema = new mongoose.Schema(
   {
@@ -17,7 +17,6 @@ export const ToDoSchema = new mongoose.Schema(
     },
     lastChecked: { type: Date },
     period: { type: Number },
-    deleted: { type: Boolean, required: true }
   },
   {
     timestamps: false,

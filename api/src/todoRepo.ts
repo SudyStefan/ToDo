@@ -1,53 +1,68 @@
 import mongoose from "mongoose";
-import { ToDoEntryDTO, ToDoType, ToDoStatus } from "./models/ToDoDTO.js";
-import { ToDoSchema } from "./models/ToDoSchema.js";
+import { ToDoEntryDTO, ToDoType, ToDoStatus } from "./models/todoDTO.js";
+import { ToDoSchema } from "./models/todoSchema.js";
 import { dbAccount } from "./dbAccount.js";
 
 await mongoose.connect(`mongodb+srv://${dbAccount.user}:${dbAccount.password}@tododata.zndg1ff.mongodb.net/?appName=TodoData`);
 const ToDoModel = mongoose.model("ToDoEntry", ToDoSchema);
 
-const fromEntityToDTO = (entity: any): ToDoEntryDTO => ({
-  _id: entity._id.toString(),
-  text: entity.text,
-  status: entity.status,
-  creationDate: entity.creationDate.toISOString(),
-  type: entity.type,
-  lastChecked: entity.lastChecked ? entity.lastChecked.toISOString() : null,
-  period: entity.period,
-  deleted: entity.deleted,
-})
+const fromEntityToDTO = (entity: any): ToDoEntryDTO | undefined => {
+  try {
+    return {
+      _id: entity._id,
+      text: entity.text,
+      status: entity.status,
+      creationDate: entity.creationDate.toISOString(),
+      type: entity.type,
+      lastChecked: entity.lastChecked ? entity.lastChecked.toISOString() : null,
+      period: entity.period,
+    };
+  } catch (error) {
+    console.log("Faulty entity:", entity);
+  };
+}
+  
+const toEntityFromDTO = (entry: ToDoEntryDTO): any => {
+  try {
+    return {
+      _id: new mongoose.Types.ObjectId(entry._id),
+      text: entry.text,
+      status: entry.status,
+      creationDate: entry.creationDate,
+      type: entry.type,
+      lastChecked: entry.lastChecked ? entry.lastChecked : null,
+      period: entry.period,
+    } 
+  } catch (error) {
+    console.log("Faulty DTO:", entry);
+  }
+};
 
-const toEntityFromDTO = (entry: ToDoEntryDTO): any => ({
-  _id: new mongoose.Types.ObjectId(entry._id),
-  text: entry.text,
-  status: entry.status,
-  creationDate: entry.creationDate,
-  type: entry.type,
-  lastChecked: entry.lastChecked ? entry.lastChecked : null,
-  period: entry.period,
-  deleted: entry.deleted,
-});
-
-class ToDoRepo {
-  getAll(): Promise<ToDoEntryDTO[]> {
-    console.log("Fetching all entries from database");
-    return ToDoModel.find().then(entities => entities.map(fromEntityToDTO));
+class toDoRepo {
+  public getAll = (): Promise<ToDoEntryDTO[]> => {
+    return ToDoModel.find()
+      .then(entities => entities.map(fromEntityToDTO).filter(Boolean) as ToDoEntryDTO[])
+      .catch(err => err);
   };
 
-  get(id: number): Promise<ToDoEntryDTO | null> {
-    console.log(`Fetching entry with id ${id} from database`);
-    return ToDoModel.findById(id).then(entity => entity ? fromEntityToDTO(entity) : null);
-  }
+  public get = (id: number): Promise<ToDoEntryDTO | null> => {
+    return ToDoModel.findById(id)
+      .then(entity => fromEntityToDTO(entity))
+      .catch(err => err);
+  };
 
-  add(newEntry: ToDoEntryDTO): Promise<ToDoEntryDTO> {
-    return new ToDoModel(toEntityFromDTO(newEntry))
-      .save()
+  public add = (entry: ToDoEntryDTO): Promise<ToDoEntryDTO> => {
+    return new ToDoModel(toEntityFromDTO(entry)).save()
       .then(saved => fromEntityToDTO(saved))
-      .catch(err => {
-        console.error("Error adding new entry:", err);
-        throw err;
-      });
-    }
+      .catch(err => err);
+  };
+
+  public update = (id: string, entry: ToDoEntryDTO): Promise<ToDoEntryDTO> => {
+    return new ToDoModel(toEntityFromDTO(entry)).replaceOne({ _id: id})
+      .then(saved => fromEntityToDTO(saved))
+      .catch(err => err);
+  };
 }
 
-export const toDoRepo = new ToDoRepo();
+//Singleton
+export const ToDoRepo = new toDoRepo();

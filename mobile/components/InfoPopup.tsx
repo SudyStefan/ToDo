@@ -28,11 +28,11 @@ export const InfoPopup = ({data, onUndo, onTimeout }: UndoProp) => {
     style={styles.undoView} 
     testID="InfoPopupView">
       <FlatList
-      testID="UndoList"
+      testID="PupupList"
       data={data} 
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={item => item.id}
       contentContainerStyle={styles.undoList}
-      renderItem={({ item }) => item.prevStatus ?
+      renderItem={({ item }) => item.prevStatus != null ?
         <UndoItem 
         text={item.text} 
         onUndo={() => onUndo(item.id)}

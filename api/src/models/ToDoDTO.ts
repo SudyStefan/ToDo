@@ -22,5 +22,4 @@ export interface ToDoEntryDTO {
   type: number,
   lastChecked?: string,
   period?: number,
-  deleted: boolean,
 }

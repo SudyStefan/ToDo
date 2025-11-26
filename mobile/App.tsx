@@ -3,20 +3,19 @@ import { Root } from "./components/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ToDoEntry } from "../shared/types/ToDoEntry";
 import { ActivityIndicator, View, Text } from "react-native";
-import { getToDos } from "./service/ToDoService";
+import { ToDoService } from "./service/ToDoService";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<ToDoEntry[]>([]);
 
   useEffect(() => {
-    getToDos()
+    ToDoService.getTodos()
       .then(fetchedTodos => setTodos(fetchedTodos))
-      .catch(err => console.error("Error fetching todos:", err))
-      .finally(() => {
-        console.log(`Fetched ${todos.length} todos`);
-        setLoading(false);
-      });
+      .catch(() => {
+        console.error("Failed to fetch on startup, swaping to offline mode!");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {

@@ -22,7 +22,6 @@ export interface ToDoEntry {
   type: ToDoType;
   lastChecked?: Date;
   period?: number; 
-  deleted: boolean;
 };
 
 export interface ToDoEntryDTO {
@@ -33,7 +32,6 @@ export interface ToDoEntryDTO {
   type: number,
   lastChecked?: string,
   period?: number,
-  deleted: boolean,
 }
 
 export const fromDTO = (dto: ToDoEntryDTO): ToDoEntry => {
