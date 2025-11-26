@@ -5,14 +5,13 @@ import { styles } from "../styles/styles";
 import { ToDoItem } from "./ToDoItem";
 import { PeriodicItem } from "./PeriodicItem";
 
-type PeriodicPageProp = {
+export type PeriodicPageProp = {
   data: ToDoEntry[];
   onCheck: Function;
   onDelete: Function;
 };
 
-export default function PeriodicPage({data, onCheck, onDelete}: PeriodicPageProp) {
-
+export const PeriodicPage = ({data, onCheck, onDelete}: PeriodicPageProp) => {
   return (
     <FlatList
     data={data.filter(data => data.status !== ToDoStatus.Deleted && data.type === ToDoType.Periodic)}

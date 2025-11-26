@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Root from "./components/Root";
+import { Root } from "./components/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ToDoEntry } from "../shared/types/ToDoEntry";
 import { ActivityIndicator, View, Text } from "react-native";

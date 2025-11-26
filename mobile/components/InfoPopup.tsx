@@ -3,30 +3,43 @@ import { FlatList } from "react-native-gesture-handler";
 import { styles } from "../styles/styles";
 import React from "react";
 import { UndoItem } from "./UndoItem";
-import { RecentlyChanged } from "./Root";
+import { ErrorItem } from "./ErrorItem";
+import { ToDoStatus } from "../../shared/types/ToDoEntry";
 
-type UndoProp = {
-  data: RecentlyChanged[], 
+export type PopupItem = {
+  id: string,
+  text: string,
+  prevStatus?: ToDoStatus,
+  currentStatus?: ToDoStatus,
+};
+
+export type UndoProp = {
+  data: PopupItem[], 
   onUndo: Function, 
   onTimeout: Function,
 }
 
-export default function UndoPopup({data, onUndo, onTimeout }: UndoProp) {
+export const wait = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
+export const InfoPopup = ({data, onUndo, onTimeout }: UndoProp) => {
   return(
     <View
     style={styles.undoView} 
-    testID="UndoPopupView">
+    testID="InfoPopupView">
       <FlatList
       testID="UndoList"
       data={data} 
       keyExtractor={item => item.id.toString()}
       contentContainerStyle={styles.undoList}
-      renderItem={({ item }) => 
+      renderItem={({ item }) => item.prevStatus ?
         <UndoItem 
         text={item.text} 
-        id={item.id}
         onUndo={() => onUndo(item.id)}
         onTimeout={() => onTimeout(item.id)} />
+        : 
+        <ErrorItem 
+        error={item.text} />
       }
       />
     </View>

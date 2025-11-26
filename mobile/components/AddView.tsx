@@ -4,7 +4,7 @@ import { styles, colors } from "../styles/styles";
 import { TextInput } from 'react-native-gesture-handler';
 import { ToDoType } from '../../shared/types/ToDoEntry';
 
-type AddViewProps = {
+export type AddViewProps = {
   isVisible: boolean,
   onAdd: Function,
   onClose: Function,

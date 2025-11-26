@@ -4,12 +4,12 @@ import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
 import { styles } from "../styles/styles";
 import { ToDoItem } from "./ToDoItem";
 
-type SinglePageProp = {
+export type SinglePageProp = {
   data: ToDoEntry[];
   onCheck: Function;
 };
 
-export default function SinglePage({data, onCheck}: SinglePageProp) {
+export const SinglePage = ({data, onCheck}: SinglePageProp) => {
   return (
     <FlatList testID="SinglePage"
     data={data.filter(data => data.type === ToDoType.Single && data.status === ToDoStatus.Open)}

@@ -3,13 +3,13 @@ import { Dimensions, Pressable, StyleProp, View, ViewStyle } from "react-native"
 import { colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-type FPProps = {
+export type FloatingPressableProp = {
   onPress: Function,
   style: StyleProp<ViewStyle>,
   iconName: any,
 };
 
-export default function FloatingPressable({onPress, style, iconName}: FPProps) {
+export const FloatingPressable = ({onPress, style, iconName}: FloatingPressableProp) => {
   return (
     <Pressable onPress={() => onPress()} style={style}>
       <Ionicons 

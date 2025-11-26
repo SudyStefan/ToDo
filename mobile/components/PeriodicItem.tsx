@@ -4,7 +4,7 @@ import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
 import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
 
-type PeriodicItemProp = {
+export type PeriodicItemProp = {
   item: ToDoEntry,
   onPress: Function,
   onSwipe: Function,

@@ -5,7 +5,7 @@ import { styles, colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
 
-type TodoItemProp = {
+export type TodoItemProp = {
   item: ToDoEntry,
   onPress: Function,
   onSwipe: Function,

@@ -2,14 +2,13 @@ import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
 import { useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useState } from "react";
-import SinglePage from "./SinglePage";
+import { SinglePage } from "./SinglePage";
 import { styles, colors } from "../styles/styles";
-import FloatingPressable from "./FloatingPressable";
+import { FloatingPressable } from "./FloatingPressable";
 import { AddView } from "./AddView";
-import DonePage from "./DonePage";
-import UndoPopup from "./UndoPopup";
-import PeriodicPage from "./PeriodicPage";
-import axios from "axios";
+import { DonePage } from "./DonePage";
+import { InfoPopup, PopupItem } from "./InfoPopup";
+import { PeriodicPage } from "./PeriodicPage";
 import { postToDo } from "../service/ToDoService";
 
 const routes = [
@@ -18,25 +17,20 @@ const routes = [
   { key: 'done', title: 'DONE' },
 ];
 
-export type RecentlyChanged = {
-  id: string,
-  text: string,
-  prevStatus: ToDoStatus,
-  currentStatus: ToDoStatus,
-};
 
-type RootProp = {
+
+export type RootProp = {
   todos: ToDoEntry[],
   setTodos: React.Dispatch<React.SetStateAction<ToDoEntry[]>>
 }
 
-export default function Root({todos, setTodos}: RootProp) {
+export const Root = ({todos, setTodos}: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
-  const [recentlyChanged, setRecentlyChanged] = useState<RecentlyChanged[]>([]);
+  const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
 
   const changeTodo = (id: string, newStatus: ToDoStatus) => {
     let todo = todos.find(item => item._id === id)!;
-    setRecentlyChanged([...recentlyChanged, 
+    setPopupItems([...popupItems, 
       { 
         id: todo._id, 
         text: todo.text, 
@@ -48,9 +42,9 @@ export default function Root({todos, setTodos}: RootProp) {
 
   const undoChange = (id: string) => {
     setTodos(items => items.map(todo => todo._id === id ? 
-      { ...todo, status: recentlyChanged.find(item => item.id === id)!.prevStatus } 
+      { ...todo, status: popupItems.find(item => item.id === id)!.prevStatus! } 
       : todo ));
-    setRecentlyChanged(changed => changed.filter(todo => todo.id !== id));
+    setPopupItems(changed => changed.filter(todo => todo.id !== id));
   };
 
   const addTodo = async (text: string, type: ToDoType, period = undefined) => {
@@ -66,7 +60,9 @@ export default function Root({todos, setTodos}: RootProp) {
 
     postToDo(todo)
       .then(newTodo => setTodos([...todos, newTodo]))
-      .catch(err => console.error("Failed to add todo:", err));
+      .catch(err => {
+        console.error("Failed to add todo:", err);
+      });
     
     setAddViewVisible(false);
   };
@@ -127,10 +123,10 @@ export default function Root({todos, setTodos}: RootProp) {
           style={styles.roundPressableButton}
           iconName={"add"} />
       </View>
-      <UndoPopup 
-      data={recentlyChanged} 
+      <InfoPopup 
+      data={popupItems} 
       onUndo={(id: string) => undoChange(id)}
-      onTimeout={(id: string) => setRecentlyChanged(prev => prev.filter(item => item.id !== id))} />
+      onTimeout={(id: string) => setPopupItems(prev => prev.filter(item => item.id !== id))} />
     </View>
   );
 }
