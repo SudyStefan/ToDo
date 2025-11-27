@@ -15,17 +15,17 @@ export enum TimeInSeconds {
 }
 
 export interface ToDoEntry {
-  _id: string;
+  id: string;
   text: string;
   status: ToDoStatus;
   creationDate: Date;
   type: ToDoType;
   lastChecked?: Date;
-  period?: number; 
+  periodSeconds?: number; 
 };
 
 export interface ToDoEntryDTO {
-  _id: string,
+  id: string,
   text: string,
   status: number, 
   creationDate: string,
