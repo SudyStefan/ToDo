@@ -1,9 +1,18 @@
 import { Request, Response } from "express";
-import { ToDoRepo } from "../todoRepo.js";
+import { MongoRepo } from "../repositories/mongoRepository.js";
+import { Repository } from "../repositories/Repository.js";
+import { PostgreRepository } from "../repositories/postgreRepository.js";
 
-class toDoController {
+class todoController {
+  private repo: Repository;
+  
+  constructor(repository: Repository) {
+    this.repo = repository;
+  }
+
+  
   public getAllEntries = (req: Request, res: Response) => {
-    ToDoRepo.getAll()
+    this.repo.getAll()
       .then(entries => res.json(entries))
       .catch(err => {
         console.error("Error fetching entries:", err);
@@ -12,23 +21,22 @@ class toDoController {
   };
 
   public getEntry = (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-    ToDoRepo.get(id)
+    this.repo.get(req.params.id)
       .then(entry => res.json(entry ? entry : res.status(404).json({ error: "Not Found" })))
       .catch(err => res.status(500).json({ error: "Internal Server Error" }));
   };
 
   public addEntry = (req: Request, res: Response) => {
-    ToDoRepo.add(req.body)
+    this.repo.add(req.body)
       .then(entry => res.json(entry))
       .catch(err => {
-        console.error("Error adding entry:", err);
+        console.error("Error adding entry: ", err);
         res.status(500).json({ error: "Internal Server Error" });
       });
   };
 
   public updateEntry = (req: Request, res: Response) => {
-    ToDoRepo.update(req.params.id, req.body)
+    this.repo.update(req.params.id, req.body)
       .then(entry => res.json(entry))
       .catch(err => {
         console.error("Error updating entry:", err);
@@ -37,5 +45,5 @@ class toDoController {
   };
 }
 
-//Singleton
-export const ToDoController = new toDoController();
+//export const TodoController = new todoController(MongoRepo);
+export const TodoController = new todoController(PostgreRepository);

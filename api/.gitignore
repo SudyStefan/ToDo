@@ -1,5 +1,8 @@
 dist/
 src/dbAccount.ts
+.env
+
 
 # dependencies
 node_modules/
+/src/generated/prisma

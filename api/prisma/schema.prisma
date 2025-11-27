@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model todo_entry {
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  text           String
+  description    String?
+  todo_status    item_status
+  todo_type      item_type
+  creation_date  DateTime    @db.Date
+  last_checked   DateTime?   @db.Date
+  period_seconds Int?
+}
+
+enum item_status {
+  OPEN
+  DONE
+  DELETED
+}
+
+enum item_type {
+  SINGLE
+  PERIODIC
+}

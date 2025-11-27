@@ -1,25 +1,25 @@
-export enum ToDoStatus {
-  Open,
-  Done,
-  Deleted,
+export enum TodoStatus {
+  OPEN,
+  DONE,
+  DELETED,
 };
 
-export enum ToDoType {
-  Single,
-  Periodic,
+export enum TodoType {
+  SINGLE,
+  PERIODIC,
 };
 
 export enum TimeInSeconds {
-  Day = 60 * 60 * 24,
-  Week = Day * 7,
+  DAY = 60 * 60 * 24,
+  WEEK = DAY * 7,
 }
 
-export interface ToDoEntryDTO {
-  _id?: string,
+export interface TodoEntryDTO {
+  id: string,
   text: string,
-  status: number, 
+  status: TodoStatus, 
   creationDate: string,
-  type: number,
+  type: TodoType,
   lastChecked?: string,
   period?: number,
 }
