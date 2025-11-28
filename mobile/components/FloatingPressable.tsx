@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Pressable, StyleProp, View, ViewStyle } from "react-native";
+import { Dimensions, Pressable, StyleProp, ViewStyle } from "react-native";
 import { colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
 

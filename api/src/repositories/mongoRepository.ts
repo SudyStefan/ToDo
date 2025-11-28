@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TodoEntryDTO, TodoType, TodoStatus } from "../models/todoDTO.js";
+import { TodoEntryDTO, TodoType, TodoStatus } from "../models/todoEntryDTO.js";
 import { TodoSchema } from "../models/todoSchema.js";
 import { dbAccount } from "../dbAccount.js";
 import { Repository } from "./Repository.js";
@@ -8,6 +8,8 @@ await mongoose.connect(`mongodb+srv://${dbAccount.user}:${dbAccount.password}@to
 const ToDoModel = mongoose.model("ToDoEntry", TodoSchema);
 
 class mongoRepo implements Repository {
+  public name = "MongoRepo";
+
   private toDTO = (entity: any): TodoEntryDTO | undefined => {
     try {
       return {
@@ -17,7 +19,7 @@ class mongoRepo implements Repository {
         creationDate: entity.creationDate.toISOString(),
         type: entity.type,
         lastChecked: entity.lastChecked ? entity.lastChecked.toISOString() : null,
-        period: entity.period,
+        periodSeconds: entity.period,
       };
     } catch (error) {
       console.log("Faulty entity:", entity);
@@ -33,7 +35,7 @@ class mongoRepo implements Repository {
         creationDate: entry.creationDate,
         type: entry.type,
         lastChecked: entry.lastChecked ? entry.lastChecked : null,
-        period: entry.period,
+        period: entry.periodSeconds,
       } 
     } catch (error) {
       console.log("Faulty DTO:", entry);

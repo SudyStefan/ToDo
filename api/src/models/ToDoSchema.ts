@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TodoStatus, TodoType } from "./todoDTO.js";
+import { TodoStatus, TodoType } from "./todoEntryDTO.js";
 
 export const TodoSchema = new mongoose.Schema(
   {

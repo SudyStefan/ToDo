@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, FlatList, Pressable, StyleSheet, Dimensions } from "react-native";
-import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
+import { FlatList } from "react-native";
+import { TodoItem, TodoStatus, TodoType } from "../models/todoItem";
 import { styles } from "../styles/styles";
-import { ToDoItem } from "./ToDoItem";
+import { TodoListItem } from "./TodoListItem";
 
 export type SinglePageProp = {
-  data: ToDoEntry[];
+  data: TodoItem[];
   onCheck: Function;
 };
 
 export const SinglePage = ({data, onCheck}: SinglePageProp) => {
   return (
     <FlatList testID="SinglePage"
-    data={data.filter(data => data.type === ToDoType.Single && data.status === ToDoStatus.Open)}
-    keyExtractor={item => item._id}
+    data={data.filter(data => data.type === TodoType.SINGLE && data.status === TodoStatus.OPEN)}
+    keyExtractor={item => item.id}
     contentContainerStyle={styles.singleList}
     renderItem={({ item }) => 
-      <ToDoItem 
+      <TodoListItem 
       item={item} 
       onSwipe={onCheck} 
       onPress={onCheck} 

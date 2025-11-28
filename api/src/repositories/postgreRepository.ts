@@ -1,36 +1,40 @@
-import { item_status, PrismaClient } from "@prisma/client";
-import { TodoEntryDTO, TodoStatus } from "../models/todoDTO.js";
+import { item_status, item_type, PrismaClient, todo_entry } from "@prisma/client";
+import { TimeInSeconds, TodoCreateDTO, TodoEntryDTO, TodoStatus, TodoType } from "../models/todoEntryDTO.js";
 import { Repository } from "./Repository.js";
 
 const prisma = new PrismaClient();
 
 class postgreRepository implements Repository {
+  public name = "PostgreSQLRepo";
 
-  private toDTO = (entry: any): TodoEntryDTO => {
+  private toDTO = (entry: todo_entry): TodoEntryDTO => {
     return {
       id: entry.id,
       text: entry.text,
-      status: entry.status != TodoStatus.DELETED ? entry.status : null,
-      creationDate: entry.creationDate.toISOString(),
-      type: entry.type,
-      lastChecked: entry.lastChecked ? entry.lastChecked.toISOString() : null,
-      period: entry.period,
+      description: entry.description ?? undefined,
+      status: entry.todo_status as TodoStatus,
+      creationDate: entry.creation_date.toISOString(),
+      type: entry.todo_type as TodoType,
+      lastChecked: entry.last_checked ? entry.last_checked.toISOString() : undefined,
+      periodSeconds: entry.period_seconds ?? undefined,
     };
   }
 
-  private fromDTO = (dto: TodoEntryDTO): any => {
+  private fromDTO = (dto: TodoEntryDTO): todo_entry => {
     return {
       id: dto.id,
       text: dto.text,
-      status: dto.status,
-      creationDate: new Date(dto.creationDate),
-      type: dto.type,
-      lastChecked: dto.lastChecked ? new Date(dto.lastChecked) : null,
-      period: dto.period,
+      description: dto.description ?? null,
+      todo_status: dto.status as item_status,
+      creation_date: new Date(dto.creationDate),
+      todo_type: dto.type as item_type,
+      last_checked: dto.lastChecked ? new Date(dto.lastChecked) : null,
+      period_seconds: dto.periodSeconds ?? null,
     };
   }
 
   public getAll = (): Promise<TodoEntryDTO[]> => {
+    prisma.todo_entry.fields
     return prisma.todo_entry.findMany({
       where: { 
         todo_status: { 
@@ -43,7 +47,7 @@ class postgreRepository implements Repository {
 
   public get = (id: string): any | Promise<TodoEntryDTO | null> => {
     return prisma.todo_entry.findFirst({where: { id: id }})
-      .then(sqlEntry => this.toDTO(sqlEntry))
+      .then(entry => entry ? this.toDTO(entry) : null)
       .catch(err => err);
   }
 

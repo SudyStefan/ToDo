@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { View, Text, Pressable, Animated } from "react-native";
+import { Text, Pressable, Animated } from "react-native";
 import { styles } from "../styles/styles";
 import { wait } from "./InfoPopup";
 

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Root } from "./components/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ToDoEntry } from "../shared/types/ToDoEntry";
+import { TodoItem } from "./models/todoItem";
 import { ActivityIndicator, View, Text } from "react-native";
-import { ToDoService } from "./service/ToDoService";
+import { TodoService } from "./service/todoService";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [todos, setTodos] = useState<ToDoEntry[]>([]);
+  const [todos, setTodos] = useState<TodoItem[]>([]);
 
   useEffect(() => {
-    ToDoService.getTodos()
+    TodoService.getTodos()
       .then(fetchedTodos => setTodos(fetchedTodos))
       .catch(() => {
         console.error("Failed to fetch on startup, swaping to offline mode!");

@@ -1,6 +1,7 @@
-import { TodoEntryDTO } from "../models/todoDTO.js";
+import { TodoEntryDTO } from "../models/todoEntryDTO.js";
 
 export interface Repository {
+  name: string;
   getAll(): Promise<TodoEntryDTO[]>;
   get(id: string): Promise<TodoEntryDTO | null>;
   add(entry: TodoEntryDTO): Promise<TodoEntryDTO>;

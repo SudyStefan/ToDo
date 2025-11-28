@@ -7,6 +7,7 @@ class todoController {
   private repo: Repository;
   
   constructor(repository: Repository) {
+    console.log(`Starting API with ${repository.name} ...`);
     this.repo = repository;
   }
 

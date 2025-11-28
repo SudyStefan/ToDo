@@ -1,4 +1,4 @@
-import { ToDoEntry, ToDoStatus, ToDoType } from "../../shared/types/ToDoEntry";
+import { TodoItem, TodoStatus, TodoType } from "../models/todoItem";
 import { useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useState } from "react";
@@ -9,7 +9,7 @@ import { AddView } from "./AddView";
 import { DonePage } from "./DonePage";
 import { InfoPopup, PopupItem } from "./InfoPopup";
 import { PeriodicPage } from "./PeriodicPage";
-import { ToDoService } from "../service/ToDoService";
+import { TodoService } from "../service/todoService";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
@@ -18,50 +18,50 @@ const routes = [
 ];
 
 export type RootProp = {
-  todos: ToDoEntry[],
-  setTodos: React.Dispatch<React.SetStateAction<ToDoEntry[]>>
+  todos: TodoItem[],
+  setTodos: React.Dispatch<React.SetStateAction<TodoItem[]>>
 }
 
 export const Root = ({todos, setTodos}: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
 
-  const changeTodo = (id: string, newStatus: ToDoStatus) => {
-    const todo = todos.find(item => item._id === id)!;
+  const changeTodo = (id: string, newStatus: TodoStatus) => {
+    const todo = todos.find(item => item.id === id)!;
     setPopupItems([...popupItems, 
       { 
-        id: todo._id, 
+        id: todo.id, 
         text: todo.text, 
         prevStatus: todo.status, 
         currentStatus: newStatus 
       }]);
-    setTodos(todos.map(item => item._id === id ? { ...item, status: newStatus } : item));
+    setTodos(todos.map(item => item.id === id ? { ...item, status: newStatus } : item));
   };
 
   const undoChange = (id: string) => {
-    setTodos(items => items.map(todo => todo._id === id ? 
+    setTodos(items => items.map(todo => todo.id === id ? 
       { ...todo, status: popupItems.find(item => item.id === id)!.prevStatus! } 
         : todo ));
     setPopupItems(changed => changed.filter(todo => todo.id !== id));
   };
 
   const syncOnTimeout = (id: string) => {
-    ToDoService.putTodo(todos.find(item => item._id === id)!)
+    TodoService.putTodo(todos.find(item => item.id === id)!)
           .then(() => setPopupItems(prev => prev.filter(item => item.id !== id)))
           .catch(err => console.error(`Failed to sync: ${err}`));
     };
 
-  const addTodo = async (text: string, type: ToDoType, period = undefined) => {
-    const todo: ToDoEntry = {
-        _id: null as any, 
+  const addTodo = async (text: string, type: TodoType, period = undefined) => {
+    const todo: TodoItem = {
+        id: null as any, 
         text: text, 
-        status: ToDoStatus.Open, 
+        status: TodoStatus.OPEN, 
         creationDate: new Date(), 
         type: type,
-        period: period,
+        periodSeconds: period,
     }
 
-    ToDoService.postTodo(todo)
+    TodoService.postTodo(todo)
       .then(newTodo => setTodos([...todos, newTodo]))
       .catch(err => {
         console.error("Failed to add todo:", err);
@@ -73,22 +73,22 @@ export const Root = ({todos, setTodos}: RootProp) => {
 
   const SingleRoute = () => (
     <SinglePage 
-    data={todos.filter(item => item.type === ToDoType.Single && item.status === ToDoStatus.Open)} 
-    onCheck={(id: string) => changeTodo(id, ToDoStatus.Done)} />
+    data={todos.filter(item => item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN)} 
+    onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)} />
   );
 
   const PeriodicRoute = () => (
     <PeriodicPage 
-    data={todos.filter(item => item.type === ToDoType.Periodic)}
-    onCheck={(id: string) => changeTodo(id, ToDoStatus.Done)}
-    onDelete={(id: string) => changeTodo(id, ToDoStatus.Deleted)} />
+    data={todos.filter(item => item.type === TodoType.PERIODIC)}
+    onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)}
+    onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)} />
   );
 
   const DoneRoute = () => (
     <DonePage 
-    data={todos.filter(item => item.type === ToDoType.Single && item.status === ToDoStatus.Done)} 
-    onUncheck={(id: string) => changeTodo(id, ToDoStatus.Open)} 
-    onDelete={(id: string) => changeTodo(id, ToDoStatus.Deleted)} />
+    data={todos.filter(item => item.type === TodoType.SINGLE && item.status === TodoStatus.DONE)} 
+    onUncheck={(id: string) => changeTodo(id, TodoStatus.OPEN)} 
+    onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)} />
   );
 
   const layout = useWindowDimensions();
@@ -98,7 +98,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
     <View style={styles.root} testID="Root">
       <AddView 
         isVisible={addViewVisible} 
-        onAdd={(text: string, type: ToDoType) => addTodo(text, type)} 
+        onAdd={(text: string, type: TodoType) => addTodo(text, type)} 
         onClose={() => setAddViewVisible(false)}/>
       <TabView
         testID="TabView"

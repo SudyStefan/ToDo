@@ -4,13 +4,13 @@ import { styles } from "../styles/styles";
 import React from "react";
 import { UndoItem } from "./UndoItem";
 import { ErrorItem } from "./ErrorItem";
-import { ToDoStatus } from "../../shared/types/ToDoEntry";
+import { TodoStatus } from "../models/todoItem";
 
 export type PopupItem = {
   id: string,
   text: string,
-  prevStatus?: ToDoStatus,
-  currentStatus?: ToDoStatus,
+  prevStatus?: TodoStatus,
+  currentStatus?: TodoStatus,
 };
 
 export type UndoProp = {

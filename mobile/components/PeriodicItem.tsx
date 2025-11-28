@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Dimensions, Animated } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { View, Text } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
-import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
+import { TodoItem } from '../models/todoItem';
 
 export type PeriodicItemProp = {
-  item: ToDoEntry,
+  item: TodoItem,
   onPress: Function,
   onSwipe: Function,
 }
@@ -16,8 +16,8 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
   
   useEffect(() => {
     try {
-      setProg(Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.period!, 1));
-      setMinutesUntilDue((item.lastChecked!.getTime()/1000 + item.period! - Date.now()/1000) / 60);
+      setProg(Math.min((Date.now()/1000 - item.lastChecked!.getTime()/1000) / item.periodSeconds!, 1));
+      setMinutesUntilDue((item.lastChecked!.getTime()/1000 + item.periodSeconds! - Date.now()/1000) / 60);
     } catch (err) {
       console.error(`${err} - lastChecked type: ${typeof(item.lastChecked)}`);
     }
@@ -33,7 +33,7 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
     <Swipeable 
     renderRightActions={() => renderActions("DELETE")}
     dragOffsetFromRightEdge={Number.MAX_VALUE}
-    onSwipeableOpen={() => onSwipe(item._id)} 
+    onSwipeableOpen={() => onSwipe(item.id)} 
     containerStyle={{flexGrow: 1}}
     childrenContainerStyle={{...styles.item, borderBottomWidth: 0, paddingHorizontal: 0, paddingVertical: 0, minHeight: '10%'}}
     testID="TodoItem">

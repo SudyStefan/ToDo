@@ -1,19 +1,19 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Dimensions } from "react-native";
+import { View, Text, Pressable, Dimensions } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { ToDoEntry, ToDoStatus } from '../../shared/types/ToDoEntry';
+import { TodoItem, TodoStatus } from '../models/todoItem';
 
 export type TodoItemProp = {
-  item: ToDoEntry,
+  item: TodoItem,
   onPress: Function,
   onSwipe: Function,
   swipeLeft?: boolean
   swipeRight?: boolean
 }
 
-export const ToDoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight = false}: TodoItemProp) => {
+export const TodoListItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight = false}: TodoItemProp) => {
   const renderActions = (text: string) => (
     <View style={styles.deleteContainer}>
       <Text style={styles.deleteText}>{text}</Text>
@@ -26,15 +26,15 @@ export const ToDoItem = ({ item, onPress, onSwipe, swipeLeft = false, swipeRight
     dragOffsetFromLeftEdge={swipeLeft ? undefined : Number.MAX_VALUE}
     renderRightActions={swipeRight ? () => renderActions("DELETE") : undefined}
     dragOffsetFromRightEdge={swipeRight ? undefined : Number.MAX_VALUE}
-    onSwipeableOpen={() => onSwipe(item._id)} 
+    onSwipeableOpen={() => onSwipe(item.id)} 
     childrenContainerStyle={styles.item}
     testID="TodoItem">
       <Text style={styles.itemText} numberOfLines={1}>{item.text}</Text>
-      <Pressable onPress={() => onPress(item._id)}>
+      <Pressable onPress={() => onPress(item.id)}>
         <Ionicons 
-        name={item.status === ToDoStatus.Done ? "checkmark-circle" : "ellipse-outline"} 
+        name={item.status === TodoStatus.DONE ? "checkmark-circle" : "ellipse-outline"} 
         size={Dimensions.get('window').height * 0.06} 
-        color={item.status === ToDoStatus.Done ? colors.seattlegreen : colors.soxred} />
+        color={item.status === TodoStatus.DONE ? colors.seattlegreen : colors.soxred} />
       </Pressable>
     </Swipeable>
   );

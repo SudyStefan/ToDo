@@ -1,4 +1,4 @@
-import { ToDoEntry, ToDoStatus, ToDoType, TimeInSeconds } from "../types/ToDoEntry.js";
+import { ToDoEntry, ToDoStatus, ToDoType, TimeInSeconds } from "../../mobile/models/todoItem.js";
 
 export const DummyData: ToDoEntry[] = [
   { id: '1', text: 'Learn TypeScript', status: ToDoStatus.Open, creationDate: new Date("2025-10-01"), type: ToDoType.Single },
