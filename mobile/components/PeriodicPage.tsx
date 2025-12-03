@@ -1,5 +1,5 @@
 import { FlatList } from "react-native";
-import { TodoItem, TodoStatus, TodoType } from "../models/todoItem";
+import { TodoItem, TodoStatus, TodoType } from "../types/todoItem";
 import { styles } from "../styles/styles";
 import { PeriodicItem } from "./PeriodicItem";
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, Modal} from "react-native";
 import { styles, colors } from "../styles/styles";
 import { TextInput } from 'react-native-gesture-handler';
-import { TodoType } from '../models/todoItem';
+import { TodoType } from '../types/todoItem';
 
 export type AddViewProps = {
   isVisible: boolean,

@@ -1,4 +1,4 @@
-import { TodoItem, TodoStatus, TodoType } from "../models/todoItem";
+import { TodoItem, TodoStatus, TodoType } from "../types/todoItem";
 import { useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useState } from "react";
@@ -9,7 +9,7 @@ import { AddView } from "./AddView";
 import { DonePage } from "./DonePage";
 import { InfoPopup, PopupItem } from "./InfoPopup";
 import { PeriodicPage } from "./PeriodicPage";
-import { TodoService } from "../service/todoService";
+import { todoService } from "../service/todoService";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
@@ -19,7 +19,8 @@ const routes = [
 
 export type RootProp = {
   todos: TodoItem[],
-  setTodos: React.Dispatch<React.SetStateAction<TodoItem[]>>
+  setTodos: React.Dispatch<React.SetStateAction<TodoItem[]>>,
+  offline: boolean
 }
 
 export const Root = ({todos, setTodos}: RootProp) => {
@@ -46,7 +47,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
   };
 
   const syncOnTimeout = (id: string) => {
-    TodoService.putTodo(todos.find(item => item.id === id)!)
+    todoService.putTodo(todos.find(item => item.id === id)!)
           .then(() => setPopupItems(prev => prev.filter(item => item.id !== id)))
           .catch(err => console.error(`Failed to sync: ${err}`));
     };
@@ -61,7 +62,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
         periodSeconds: period,
     }
 
-    TodoService.postTodo(todo)
+    todoService.postTodo(todo)
       .then(newTodo => setTodos([...todos, newTodo]))
       .catch(err => {
         console.error("Failed to add todo:", err);

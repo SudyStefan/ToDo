@@ -3,7 +3,7 @@ import { View, Text, Pressable, Dimensions } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { TodoItem, TodoStatus } from '../models/todoItem';
+import { TodoItem, TodoStatus } from '../types/todoItem';
 
 export type TodoItemProp = {
   item: TodoItem,

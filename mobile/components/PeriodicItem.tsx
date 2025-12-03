@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
-import { TodoItem } from '../models/todoItem';
+import { TodoItem } from '../types/todoItem';
 
 export type PeriodicItemProp = {
   item: TodoItem,

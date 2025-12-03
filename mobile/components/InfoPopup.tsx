@@ -4,7 +4,7 @@ import { styles } from "../styles/styles";
 import React from "react";
 import { UndoItem } from "./UndoItem";
 import { ErrorItem } from "./ErrorItem";
-import { TodoStatus } from "../models/todoItem";
+import { TodoStatus } from "../types/todoItem";
 
 export type PopupItem = {
   id: string,

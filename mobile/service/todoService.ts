@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { TodoItem, TodoEntryDTO, TodoStatus, TodoType } from '../models/todoItem';
+import { TodoItem, TodoEntryDTO, TodoStatus, TodoType } from '../types/todoItem';
 
-class todoService {
-
+class TodoService {
   private fromDTO = (dto: TodoEntryDTO): TodoItem => {
     return {
       ...dto,
@@ -21,8 +20,7 @@ class todoService {
     }
   };
 
-
-  public getTodos = (): Promise<TodoItem[]> => {
+  public fetchTodos = (): Promise<TodoItem[]> => {
     return axios.get("http://localhost:4000/todo")
       .then(res => {
         console.log(res);
@@ -59,4 +57,4 @@ class todoService {
   };
 }
 
-export const TodoService = new todoService();
+export const todoService = new TodoService();
