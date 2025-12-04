@@ -23,10 +23,11 @@ class OfflineStorageDev implements OfflineStorage {
     const localResult = localStorage.getItem(id);
 
     offlineStorageLive.fetchTodo(id)
-      .then(res => console.info(`Fetched ${id} from internal:`, res))
       .catch(err => console.warn(`Couldn't fetch ${id} from internal:`, err));
 
-    return new Promise(localResult ? JSON.parse(localResult) : null);
+    return Promise.resolve(
+      localResult ? JSON.parse(localResult) as TodoItem : null
+    );
   }
 
   public fetchAllTodos = (): Promise<TodoItem[] | never[]> => {
@@ -35,7 +36,7 @@ class OfflineStorageDev implements OfflineStorage {
     });
 
     offlineStorageLive.fetchAllTodos()
-      .then(res => console.info("Fetched from internal:", res))
+      .then(res => console.info("Successfully fetched from internal:", res))
       .catch(err => console.warn("Couldn't fetch internal:", err));
 
     return Promise.all(keys.map(key => this.fetchTodo(key)))
