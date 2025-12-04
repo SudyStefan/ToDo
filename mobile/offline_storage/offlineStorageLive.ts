@@ -14,8 +14,18 @@ class OfflineStorageLive implements OfflineStorage {
 
   public fetchTodo = (id: string): Promise<TodoItem | null> => {
     return AsyncStorage.getItem(id)
-      .then(jsonTodo => jsonTodo ? JSON.parse(jsonTodo) : null)
-      .catch(err => console.error(`Error trying to fetch todo ${id}:`, err));
+      .then(jsonTodo => {
+        const todo = jsonTodo ? JSON.parse(jsonTodo) as TodoItem : null;
+        return todo ? {
+          ...todo,
+          creationDate: new Date(todo.creationDate),
+          ...(todo.lastChecked && { lastChecked: new Date(todo.lastChecked) })
+        } : null;
+      })
+      .catch(err => {
+      console.error(`Error trying to fetch todo ${id}:`, err);
+      return null;
+      });
   }
 
   public fetchAllTodos = (): Promise<TodoItem[] | never[]> => {

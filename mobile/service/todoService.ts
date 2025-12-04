@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { TodoItem, TodoEntryDTO, TodoStatus, TodoType } from '../types/todoItem';
+import { TodoItem, TodoItemDTO, TodoStatus, TodoType } from '../types/todoItem';
 
 class TodoService {
-  private fromDTO = (dto: TodoEntryDTO): TodoItem => {
+  private fromDTO = (dto: TodoItemDTO): TodoItem => {
     return {
       ...dto,
       status: dto.status as TodoStatus,
@@ -12,7 +12,7 @@ class TodoService {
     }
   };
 
-  private toDTO = (entry: TodoItem): TodoEntryDTO => {
+  private toDTO = (entry: TodoItem): TodoItemDTO => {
     return {
       ...entry,
       creationDate: entry.creationDate.toISOString(),
@@ -23,9 +23,8 @@ class TodoService {
   public fetchTodos = (): Promise<TodoItem[]> => {
     return axios.get("http://localhost:4000/todo")
       .then(res => {
-        console.log(res);
-        const todos = res.data.map((dto: TodoEntryDTO) => this.fromDTO(dto)) as TodoItem[]
-        console.log(`Fetched ${todos.length} todos`);
+        const todos = res.data.map((dto: TodoItemDTO) => this.fromDTO(dto)) as TodoItem[]
+        console.info(`Fetched ${todos.length} todos`);
         return todos;
       })
       .catch(err => {
@@ -37,8 +36,8 @@ class TodoService {
   public postTodo = (todo: TodoItem): Promise<TodoItem> => {
     return axios.post("http://localhost:4000/todo", this.toDTO(todo))
       .then(res => {
-        const todo = this.fromDTO(res.data as TodoEntryDTO);
-        console.log(`Created todo with id ${todo.id}`);
+        const todo = this.fromDTO(res.data as TodoItemDTO);
+        console.info(`Created todo with id ${todo.id}`);
         return todo;
       })
       .catch(err => {
@@ -49,7 +48,7 @@ class TodoService {
 
   public putTodo = (todo: TodoItem): Promise<void> => {
     return axios.put(`http://localhost:4000/todo/${todo.id}`, this.toDTO(todo))
-      .then(res => console.log(`Updated todo: ${res}`))
+      .then(res => console.info(`Updated todo: ${res}`))
       .catch(err => {
         console.error(`Error updating todo: ${err}`);
         throw err;

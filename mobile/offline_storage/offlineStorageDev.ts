@@ -20,14 +20,17 @@ class OfflineStorageDev implements OfflineStorage {
   }
 
   public fetchTodo = (id: string): Promise<TodoItem | null> => {
-    const localResult = localStorage.getItem(id);
-
     offlineStorageLive.fetchTodo(id)
       .catch(err => console.warn(`Couldn't fetch ${id} from internal:`, err));
 
-    return Promise.resolve(
-      localResult ? JSON.parse(localResult) as TodoItem : null
-    );
+    const localResult = localStorage.getItem(id);
+    const parsedJson = localResult ? JSON.parse(localResult) as TodoItem : null;
+
+    return Promise.resolve(parsedJson ? { 
+      ...parsedJson,
+      creationDate: new Date(parsedJson.creationDate),
+      ...(parsedJson.lastChecked && { lastChecked: new Date(parsedJson.lastChecked) })
+     } : null);
   }
 
   public fetchAllTodos = (): Promise<TodoItem[] | never[]> => {
