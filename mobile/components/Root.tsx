@@ -8,7 +8,7 @@ import { FloatingPressable } from "./FloatingPressable";
 import { AddView } from "./AddView";
 import { DonePage } from "./DonePage";
 import { InfoPopup, PopupItem } from "./InfoPopup";
-import { todoService } from "../service/todoService";
+import { todoService } from "../services/todoService";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const routes = [
@@ -19,10 +19,10 @@ const routes = [
 export type RootProp = {
   todos: Todo[],
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
-  offline: boolean
+  online: boolean
 }
 
-export const Root = ({todos, setTodos}: RootProp) => {
+export const Root = ({todos, setTodos, online}: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
   const [index, setIndex] = React.useState(0);
@@ -48,7 +48,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
   };
 
   const syncOnTimeout = (id: string) => {
-    todoService.putTodo(todos.find(item => item.id === id)!)
+    online && todoService.putTodo(todos.find(item => item.id === id)!)
       .then(() => setPopupItems(prev => prev.filter(item => item.id !== id)))
       .catch(err => console.error(`Failed to sync: ${err}`));
     };
@@ -63,7 +63,7 @@ export const Root = ({todos, setTodos}: RootProp) => {
       periodSeconds: period,
     }
 
-    todoService.postTodo(todo)
+    online && todoService.postTodo(todo)
       .then(newTodo => setTodos([...todos, newTodo]))
       .catch(err => {
         console.error("Failed to add todo:", err);

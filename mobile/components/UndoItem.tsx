@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Text, Pressable, Animated } from "react-native";
 import { styles } from "../styles/styles";
-import { wait } from "./InfoPopup";
+import wait from "../helpers/wait";
 
 export type UndoItemProp = {
   text: string;
