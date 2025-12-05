@@ -2,9 +2,10 @@ import React from "react";
 import { Dimensions, Pressable, StyleProp, ViewStyle } from "react-native";
 import { colors } from "../styles/styles";
 import Ionicons from '@expo/vector-icons/Ionicons'
+//import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export type FloatingPressableProp = {
-  onPress: Function,
+  onPress: () => void,
   style: StyleProp<ViewStyle>,
   iconName: any,
 };

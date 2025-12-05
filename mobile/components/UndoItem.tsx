@@ -5,8 +5,8 @@ import { wait } from "./InfoPopup";
 
 export type UndoItemProp = {
   text: string;
-  onUndo: Function;
-  onTimeout: Function;
+  onUndo: () => void;
+  onTimeout: () => void;
 };
 
 export const UndoItem = ({ text, onUndo, onTimeout }: UndoItemProp) => {
@@ -35,7 +35,7 @@ export const UndoItem = ({ text, onUndo, onTimeout }: UndoItemProp) => {
       testID="UndoItem">
         <Text style={styles.itemText} numberOfLines={1}>MOVED '{text}'</Text>
         <Pressable onPress={() => onUndo()}>
-          <Text style={{ ...styles.defaultText, color: 'dodgerblue' }}>UNDO</Text>
+          <Text style={{ ...styles.addText, color: 'dodgerblue' }}>UNDO</Text>
         </Pressable>
       </Animated.View>
     );

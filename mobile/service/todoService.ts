@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { TodoItem, TodoItemDTO, TodoStatus, TodoType } from '../types/todoItem';
+import { Todo, TodoDTO, TodoStatus, TodoType } from '../types/todo';
 
 class TodoService {
-  private fromDTO = (dto: TodoItemDTO): TodoItem => {
+  private fromDTO = (dto: TodoDTO): Todo => {
     return {
       ...dto,
       status: dto.status as TodoStatus,
@@ -12,7 +12,7 @@ class TodoService {
     }
   };
 
-  private toDTO = (entry: TodoItem): TodoItemDTO => {
+  private toDTO = (entry: Todo): TodoDTO => {
     return {
       ...entry,
       creationDate: entry.creationDate.toISOString(),
@@ -20,10 +20,10 @@ class TodoService {
     }
   };
 
-  public fetchTodos = (): Promise<TodoItem[]> => {
+  public fetchTodos = (): Promise<Todo[]> => {
     return axios.get("http://localhost:4000/todo")
       .then(res => {
-        const todos = res.data.map((dto: TodoItemDTO) => this.fromDTO(dto)) as TodoItem[]
+        const todos = res.data.map((dto: TodoDTO) => this.fromDTO(dto)) as Todo[]
         console.info(`Fetched ${todos.length} todos`);
         return todos;
       })
@@ -33,10 +33,10 @@ class TodoService {
       });
   };
 
-  public postTodo = (todo: TodoItem): Promise<TodoItem> => {
+  public postTodo = (todo: Todo): Promise<Todo> => {
     return axios.post("http://localhost:4000/todo", this.toDTO(todo))
       .then(res => {
-        const todo = this.fromDTO(res.data as TodoItemDTO);
+        const todo = this.fromDTO(res.data as TodoDTO);
         console.info(`Created todo with id ${todo.id}`);
         return todo;
       })
@@ -46,7 +46,7 @@ class TodoService {
       })
   };
 
-  public putTodo = (todo: TodoItem): Promise<void> => {
+  public putTodo = (todo: Todo): Promise<void> => {
     return axios.put(`http://localhost:4000/todo/${todo.id}`, this.toDTO(todo))
       .then(res => console.info(`Updated todo: ${res}`))
       .catch(err => {

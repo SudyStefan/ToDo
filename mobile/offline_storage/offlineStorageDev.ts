@@ -1,9 +1,9 @@
-import { TodoItem } from "../types/todoItem";
+import { Todo } from "../types/todo";
 import { OfflineStorage } from "./OfflineStorage";
 import { offlineStorageLive } from "./offlineStorageLive";
 
 class OfflineStorageDev implements OfflineStorage {
-  public storeTodo = (todo: TodoItem): void => {
+  public storeTodo = (todo: Todo): void => {
     try {
       localStorage.setItem(todo.id, JSON.stringify(todo));
     } catch (err) {
@@ -13,18 +13,18 @@ class OfflineStorageDev implements OfflineStorage {
     offlineStorageLive.storeTodo(todo)
   }
 
-  public storeAllTodos = (todos: TodoItem[]): void => {
+  public storeAllTodos = (todos: Todo[]): void => {
     todos.forEach(todo => this.storeTodo(todo));
 
     offlineStorageLive.storeAllTodos(todos);
   }
 
-  public fetchTodo = (id: string): Promise<TodoItem | null> => {
+  public fetchTodo = (id: string): Promise<Todo | null> => {
     offlineStorageLive.fetchTodo(id)
       .catch(err => console.warn(`Couldn't fetch ${id} from internal:`, err));
 
     const localResult = localStorage.getItem(id);
-    const parsedJson = localResult ? JSON.parse(localResult) as TodoItem : null;
+    const parsedJson = localResult ? JSON.parse(localResult) as Todo : null;
 
     return Promise.resolve(parsedJson ? { 
       ...parsedJson,
@@ -33,7 +33,7 @@ class OfflineStorageDev implements OfflineStorage {
      } : null);
   }
 
-  public fetchAllTodos = (): Promise<TodoItem[] | never[]> => {
+  public fetchAllTodos = (): Promise<Todo[] | never[]> => {
     const keys = [...Array(localStorage.length).keys()].map(keyIndex => {
       return localStorage.key(keyIndex)!;
     });

@@ -1,21 +1,21 @@
-import { TodoItem } from "../types/todoItem";
+import { Todo } from "../types/todo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { OfflineStorage } from "./OfflineStorage";
 
 class OfflineStorageLive implements OfflineStorage {
-  public storeTodo = (todo: TodoItem): void => {
+  public storeTodo = (todo: Todo): void => {
     AsyncStorage.setItem(todo.id, JSON.stringify(todo))
       .catch(err => console.error(`Error trying to store todo ${todo.id}:`, err));
   }
 
-  public storeAllTodos = (todos: TodoItem[]): void => {
+  public storeAllTodos = (todos: Todo[]): void => {
     todos.forEach(todo => this.storeTodo(todo));
   }
 
-  public fetchTodo = (id: string): Promise<TodoItem | null> => {
+  public fetchTodo = (id: string): Promise<Todo | null> => {
     return AsyncStorage.getItem(id)
       .then(jsonTodo => {
-        const todo = jsonTodo ? JSON.parse(jsonTodo) as TodoItem : null;
+        const todo = jsonTodo ? JSON.parse(jsonTodo) as Todo : null;
         return todo ? {
           ...todo,
           creationDate: new Date(todo.creationDate),
@@ -28,7 +28,7 @@ class OfflineStorageLive implements OfflineStorage {
       });
   }
 
-  public fetchAllTodos = (): Promise<TodoItem[] | never[]> => {
+  public fetchAllTodos = (): Promise<Todo[] | never[]> => {
     return AsyncStorage.getAllKeys()
       .then(keys => Promise.all(keys.map(key => this.fetchTodo(key)))
         .then(todos => todos.filter(todo => todo !== null)))

@@ -1,6 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
-
-const { height, width } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
 
 export const colors = {
   primaryLight: 'rgb(236, 230, 214)', //eggshell
@@ -22,7 +20,7 @@ export const styles = StyleSheet.create({
   item: {
     flexGrow: 1,
     backgroundColor: colors.transparent,
-    paddingVertical: height * 0.010,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: colors.secondaryDark,
     flexDirection: 'row',
@@ -30,71 +28,64 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemText: {
-    fontSize: height * 0.025,
+    fontSize: 30,
     color: colors.primaryLight,
     maxWidth: '75%',
   },
   pressableButton: {
     flex: 1,
-    marginTop: height * 0.02,
-    padding: width * 0.03,
-    paddingHorizontal: width * 0.05,
+    marginVertical: 5,
+    padding: 10,
+    paddingHorizontal: 40,
     alignItems: 'center',
     borderRadius: 3,
     backgroundColor: colors.dodgerblue,
   },   
   roundPressableButton: {
     backgroundColor: colors.dodgerblue,
-    borderRadius: width * 0.2,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    width: width * 0.2,
-    height: width * 0.2,
+    width: 100,
+    height: 100,
   },
-  roundPressableButtonText: {
-    color: colors.primaryLight,
-    fontSize: height * 0.05,
-    textAlign: 'center',
-  },
-  deleteContainer: {
+  swipeContainer: {
     flex: 1,
     backgroundColor: colors.soxred,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    paddingHorizontal: width * 0.05,
+    paddingHorizontal: 50,
   },
-  deleteText: {
+  swipeText: {
     color: colors.primaryLight,
-    fontWeight: 'bold',
+    fontSize: 20,
   },
   addView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: width * 0.05,
-    paddingBottom: height * 0.2,
+    paddingBottom: 250,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
-  defaultText: {
+  addText: {
     color: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: height * 0.025,
+    fontSize: 30,
   },
   singleList: {
     flexGrow: 1,
-    marginHorizontal: width * 0.07,
-    marginTop: height * 0.05,
+    marginHorizontal: 20,
     justifyContent: 'flex-start',
   },
   periodicList: {
     flex: 1,
-    marginTop: height * 0.05,
+    marginTop: 50,
     justifyContent: 'flex-start',
   },
   tabBar: {
-    backgroundColor: '#111', 
-    height: "10%",
+    backgroundColor: colors.secondaryDark, 
+    height: 80,
     justifyContent: 'flex-start',
   },
   fullScreenView: {
@@ -108,20 +99,24 @@ export const styles = StyleSheet.create({
     position: 'absolute', 
     left: 0, 
     right: 0, 
-    bottom: height * 0.3,
+    bottom: 300,
     justifyContent: 'center'
   },
   undoList: {
     flexGrow: 1,
-    marginHorizontal: width * 0.08,
-    borderRadius: width * 0.03,
+    marginHorizontal: 30, 
   },
   undoItem: {
-    borderRadius: 100,
-    paddingHorizontal: width * 0.04, 
+    borderRadius: 20,
+    paddingHorizontal: 10, 
     marginVertical: 3,
     borderBottomWidth: 0, 
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(100, 100, 100, 1)',
-  }
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+  },
+  floatingPressableView: {
+    position: 'absolute',
+    bottom: 100,
+    flexDirection: "row",
+  },
 });

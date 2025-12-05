@@ -14,7 +14,7 @@ export enum TimeInSeconds {
   WEEK = DAY * 7
 }
 
-export interface TodoItemDTO {
+export interface TodoDTO {
   id: string,
   text: string,
   description?: string,
@@ -25,7 +25,7 @@ export interface TodoItemDTO {
   periodSeconds?: number,
 }
 
-export interface TodoItem {
+export interface Todo {
   id: string;
   text: string;
   description?: string;

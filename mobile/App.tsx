@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Root } from "./components/Root";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { TodoItem } from "./types/todoItem";
+import { Todo } from "./types/todo";
 import { ActivityIndicator, View, Text } from "react-native";
 import { todoService } from "./service/todoService";
 import { OfflineStorage } from "./offline_storage/OfflineStorage";
@@ -10,7 +10,7 @@ import { offlineStorageDev } from "./offline_storage/offlineStorageDev";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [offlineToggle, setOfflineToggle] = useState(false);
 
   useEffect(() => {

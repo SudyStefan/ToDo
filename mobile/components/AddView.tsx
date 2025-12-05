@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, Modal} from "react-native";
 import { styles, colors } from "../styles/styles";
 import { TextInput } from 'react-native-gesture-handler';
-import { TodoType } from '../types/todoItem';
+import { TodoType } from '../types/todo';
 
 export type AddViewProps = {
   isVisible: boolean,
@@ -22,24 +22,28 @@ export const AddView = ({isVisible, onAdd, onClose}: AddViewProps) => {
   return (
     <View style={styles.fullScreenView} testID='AddView'>
       <Modal 
-      visible={isVisible} 
-      animationType="fade" 
-      transparent={true}
-      style={styles.fullScreenView}
-      onShow={() => inputRef.current?.focus()}>
+        visible={isVisible} 
+        animationType="fade" 
+        transparent={true}
+        style={styles.fullScreenView}
+        onShow={() => inputRef.current?.focus()}>
       <View style={styles.addView}>
         <TextInput 
-        ref={inputRef} 
-        style={{ ...styles.defaultText, textAlign: "center" }} 
-        placeholder='todo name...' 
-        value={text} 
-        onChangeText={setText} />
+          ref={inputRef} 
+          style={{ ...styles.addText, textAlign: "center" }} 
+          placeholder='todo name...' 
+          value={text} 
+          onChangeText={text => setText(text)} />
         <View style={{flexDirection:"row", marginLeft: 10}}>
-          <Pressable onPress={() => {onAdd(text, TodoType.SINGLE); initClose()}} style={styles.pressableButton}>
-            <Text style={styles.defaultText}>ADD</Text>
+          <Pressable 
+            onPress={() => {onAdd(text, TodoType.SINGLE); initClose()}} 
+            style={styles.pressableButton}>
+            <Text style={styles.addText}>ADD</Text>
           </Pressable>
-          <Pressable onPress={() => initClose()} style={{...styles.pressableButton, backgroundColor: colors.soxred}}>
-            <Text style={styles.defaultText}>CANCEL</Text>
+          <Pressable 
+            onPress={() => initClose()} 
+            style={{...styles.pressableButton, backgroundColor: colors.soxred}}>
+            <Text style={styles.addText}>CANCEL</Text>
           </Pressable>
         </View>
       </View>

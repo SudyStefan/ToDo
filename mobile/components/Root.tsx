@@ -1,5 +1,5 @@
-import { TodoItem, TodoStatus, TodoType } from "../types/todoItem";
-import { useWindowDimensions, View } from "react-native";
+import { Todo, TodoStatus, TodoType } from "../types/todo";
+import { Platform, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import React, { useState } from "react";
 import { SinglePage } from "./SinglePage";
@@ -8,24 +8,25 @@ import { FloatingPressable } from "./FloatingPressable";
 import { AddView } from "./AddView";
 import { DonePage } from "./DonePage";
 import { InfoPopup, PopupItem } from "./InfoPopup";
-import { PeriodicPage } from "./PeriodicPage";
 import { todoService } from "../service/todoService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const routes = [
   { key: 'single', title: 'SINGLE' },
-  { key: 'periodic', title: 'PERIODIC' },
   { key: 'done', title: 'DONE' },
 ];
 
 export type RootProp = {
-  todos: TodoItem[],
-  setTodos: React.Dispatch<React.SetStateAction<TodoItem[]>>,
+  todos: Todo[],
+  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>,
   offline: boolean
 }
 
 export const Root = ({todos, setTodos}: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
+  const [index, setIndex] = React.useState(0);
+  const layout = useWindowDimensions();
 
   const changeTodo = (id: string, newStatus: TodoStatus) => {
     const todo = todos.find(item => item.id === id)!;
@@ -48,18 +49,18 @@ export const Root = ({todos, setTodos}: RootProp) => {
 
   const syncOnTimeout = (id: string) => {
     todoService.putTodo(todos.find(item => item.id === id)!)
-          .then(() => setPopupItems(prev => prev.filter(item => item.id !== id)))
-          .catch(err => console.error(`Failed to sync: ${err}`));
+      .then(() => setPopupItems(prev => prev.filter(item => item.id !== id)))
+      .catch(err => console.error(`Failed to sync: ${err}`));
     };
 
   const addTodo = async (text: string, type: TodoType, period = undefined) => {
-    const todo: TodoItem = {
-        id: null as any, 
-        text: text, 
-        status: TodoStatus.OPEN, 
-        creationDate: new Date(), 
-        type: type,
-        periodSeconds: period,
+    const todo: Todo = {
+      id: null as any, 
+      text: text, 
+      status: TodoStatus.OPEN, 
+      creationDate: new Date(), 
+      type: type,
+      periodSeconds: period,
     }
 
     todoService.postTodo(todo)
@@ -74,29 +75,21 @@ export const Root = ({todos, setTodos}: RootProp) => {
 
   const SingleRoute = () => (
     <SinglePage 
-    data={todos.filter(item => item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN)} 
-    onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)} />
-  );
-
-  const PeriodicRoute = () => (
-    <PeriodicPage 
-    data={todos.filter(item => item.type === TodoType.PERIODIC)}
-    onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)}
-    onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)} />
+      data={todos.filter(item => item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN)} 
+      onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)} />
   );
 
   const DoneRoute = () => (
     <DonePage 
-    data={todos.filter(item => item.type === TodoType.SINGLE && item.status === TodoStatus.DONE)} 
-    onUncheck={(id: string) => changeTodo(id, TodoStatus.OPEN)} 
-    onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)} />
+      data={todos.filter(item => item.type === TodoType.SINGLE && item.status === TodoStatus.DONE)} 
+      onUncheck={(id: string) => changeTodo(id, TodoStatus.OPEN)} 
+      onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)} />
   );
 
-  const layout = useWindowDimensions();
-  const [index, setIndex] = React.useState(0);
-  
+
+  const SafeView = Platform.OS === 'web' ? View : SafeAreaView;
   return (
-    <View style={styles.root} testID="Root">
+    <SafeView style={styles.root} testID="Root">
       <AddView 
         isVisible={addViewVisible} 
         onAdd={(text: string, type: TodoType) => addTodo(text, type)} 
@@ -106,7 +99,6 @@ export const Root = ({todos, setTodos}: RootProp) => {
         navigationState={{ index, routes }}
         renderScene={SceneMap({
           single: SingleRoute,
-          periodic: PeriodicRoute,
           done: DoneRoute,
         })}
         onIndexChange={setIndex}
@@ -115,23 +107,25 @@ export const Root = ({todos, setTodos}: RootProp) => {
         commonOptions={{ labelStyle: {fontSize: layout.height * 0.02} }} //??? https://stackoverflow.com/a/79518059
         renderTabBar={props => (
           <TabBar
-            {...props}
-            style={styles.tabBar}
-            indicatorStyle={{top: 0, height: '100%', backgroundColor: colors.primaryDark}}
-            activeColor={colors.secondaryLight}
-          />
-        )}
-      />
-      <View style={{position: 'absolute', bottom: layout.height * 0.11, right: layout.width * 0.07}} testID="ButtonView">
+          {...props}
+          style={styles.tabBar}
+          indicatorStyle={{top: 0, height: '100%', backgroundColor: colors.primaryDark}}
+          activeColor={colors.secondaryLight} />
+        )} />
+      <View style={styles.floatingPressableView}>
         <FloatingPressable 
           onPress={() => setAddViewVisible(true)} 
           style={styles.roundPressableButton}
           iconName={"add"} />
+        <FloatingPressable 
+          onPress={() => {}}
+          style={styles.roundPressableButton}
+          iconName={"mic"} />
       </View>
       <InfoPopup 
-      data={popupItems} 
-      onUndo={(id: string) => undoChange(id)}
-      onTimeout={(id: string) => syncOnTimeout(id)} />
-    </View>
+        data={popupItems} 
+        onUndo={(id: string) => undoChange(id)}
+        onTimeout={(id: string) => syncOnTimeout(id)} />
+    </SafeView>
   );
 }

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text } from "react-native";
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { styles, colors } from "../styles/styles";
-import { TodoItem } from '../types/todoItem';
+import { Todo } from '../types/todo';
 
 export type PeriodicItemProp = {
-  item: TodoItem,
+  item: Todo,
   onPress: Function,
   onSwipe: Function,
 }
@@ -24,8 +24,8 @@ export const PeriodicItem = ({ item, onPress, onSwipe }: PeriodicItemProp) => {
   }, []);
 
   const renderActions = (text: string) => (
-    <View style={styles.deleteContainer}>
-      <Text style={styles.deleteText}>{text}</Text>
+    <View style={styles.swipeContainer}>
+      <Text style={styles.swipeText}>{text}</Text>
     </View>
   );
 

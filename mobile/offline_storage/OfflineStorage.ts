@@ -1,8 +1,8 @@
-import { TodoItem } from "../types/todoItem";
+import { Todo } from "../types/todo";
 
 export interface OfflineStorage {
-  storeTodo(todo: TodoItem): void;
-  storeAllTodos(todos: TodoItem[]): void;
-  fetchTodo(id: string): Promise<TodoItem | null>;
-  fetchAllTodos(): Promise<TodoItem[] | never[]>;
+  storeTodo(todo: Todo): void;
+  storeAllTodos(todos: Todo[]): void;
+  fetchTodo(id: string): Promise<Todo | null>;
+  fetchAllTodos(): Promise<Todo[] | never[]>;
 }

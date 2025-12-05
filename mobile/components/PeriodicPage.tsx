@@ -1,10 +1,10 @@
 import { FlatList } from "react-native";
-import { TodoItem, TodoStatus, TodoType } from "../types/todoItem";
+import { Todo, TodoStatus, TodoType } from "../types/todo";
 import { styles } from "../styles/styles";
 import { PeriodicItem } from "./PeriodicItem";
 
 export type PeriodicPageProp = {
-  data: TodoItem[];
+  data: Todo[];
   onCheck: Function;
   onDelete: Function;
 };
