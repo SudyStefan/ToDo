@@ -7,6 +7,7 @@ import { todoService } from "./services/todoService";
 import { OfflineStorage } from "./offline_storage/OfflineStorage";
 import { offlineStorageDev } from "./offline_storage/offlineStorageDev";
 import { offlineStorageLive } from "./offline_storage/offlineStorageLive";
+import { styles } from "./styles/styles";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -14,28 +15,31 @@ export default function App() {
   const [onlineToggle, setOnlineToggle] = useState(false);
 
   useEffect(() => {
-    const storage: OfflineStorage = Platform.OS === 'web' ? offlineStorageDev : offlineStorageLive;
-    todoService.fetchTodos()
-      .then(fetchedTodos => {
+    const storage: OfflineStorage =
+      Platform.OS === "web" ? offlineStorageDev : offlineStorageLive;
+    todoService
+      .fetchTodos()
+      .then((fetchedTodos) => {
         setTodos(fetchedTodos);
         storage.storeAllTodos(fetchedTodos);
         setOnlineToggle(true);
       })
       .catch(() => {
         console.warn("Failed to fetch on startup, swaping to offline mode.");
-        return storage.fetchAllTodos()
-          .then(readTodos => setTodos(readTodos))
+        return storage
+          .fetchAllTodos()
+          .then((readTodos) => setTodos(readTodos))
           .catch((err) => {
             console.error("Failed to get from local storage on startup.");
             throw err;
-          })
+          });
       })
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={styles.loadingView}>
         <ActivityIndicator size="large" />
         <Text>Loading...</Text>
       </View>
@@ -47,4 +51,3 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
-

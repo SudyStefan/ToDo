@@ -4,11 +4,10 @@ export type ErrorItemProp = {
   error: string;
 };
 
-export const ErrorItem = ({error}: ErrorItemProp) => {
-
+export const ErrorItem = ({ error }: ErrorItemProp) => {
   return (
     <View>
       <Text>{error}</Text>
     </View>
   );
-}
+};

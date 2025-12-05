@@ -10,33 +10,38 @@ export type UndoItemProp = {
 };
 
 export const UndoItem = ({ text, onUndo, onTimeout }: UndoItemProp) => {
-    const itemOpacity = useRef(new Animated.Value(0)).current;
+  const itemOpacity = useRef(new Animated.Value(0)).current;
 
-    useEffect(() => {
-      Animated.timing(itemOpacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true
-      }).start();
+  useEffect(() => {
+    Animated.timing(itemOpacity, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
 
-      wait(3000)
-        .then(() => Animated.timing(itemOpacity, {
-                      toValue: 0,
-                      duration: 1500,
-                      useNativeDriver: true
-                    }).start())
-        .then(() => wait(1500))
-        .then(() => onTimeout());
-    }, []);
+    wait(3000)
+      .then(() =>
+        Animated.timing(itemOpacity, {
+          toValue: 0,
+          duration: 1500,
+          useNativeDriver: true,
+        }).start(),
+      )
+      .then(() => wait(1500))
+      .then(() => onTimeout());
+  }, []);
 
-    return (
-      <Animated.View 
-      style={{ ...styles.item, ...styles.undoItem, opacity: itemOpacity }} 
-      testID="UndoItem">
-        <Text style={styles.itemText} numberOfLines={1}>MOVED '{text}'</Text>
-        <Pressable onPress={() => onUndo()}>
-          <Text style={{ ...styles.addText, color: 'dodgerblue' }}>UNDO</Text>
-        </Pressable>
-      </Animated.View>
-    );
-  }
+  return (
+    <Animated.View
+      style={{ ...styles.item, ...styles.undoItem, opacity: itemOpacity }}
+      testID="UndoItem"
+    >
+      <Text style={styles.itemText} numberOfLines={1}>
+        MOVED '{text}'
+      </Text>
+      <Pressable onPress={() => onUndo()}>
+        <Text style={{ ...styles.addText, color: "dodgerblue" }}>UNDO</Text>
+      </Pressable>
+    </Animated.View>
+  );
+};

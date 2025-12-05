@@ -1,1 +1,1 @@
-declare module 'eslint-plugin-react-native';
+declare module "eslint-plugin-react-native";

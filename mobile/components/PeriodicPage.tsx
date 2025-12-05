@@ -5,21 +5,22 @@ import { PeriodicItem } from "./PeriodicItem";
 
 export type PeriodicPageProp = {
   data: Todo[];
-  onCheck: Function;
-  onDelete: Function;
+  onCheck: () => void;
+  onDelete: () => void;
 };
 
-export const PeriodicPage = ({data, onCheck, onDelete}: PeriodicPageProp) => {
+export const PeriodicPage = ({ data, onCheck }: PeriodicPageProp) => {
   return (
     <FlatList
-    data={data.filter(data => data.status !== TodoStatus.DELETED && data.type === TodoType.PERIODIC)}
-    keyExtractor={item => item.id}
-    contentContainerStyle={styles.periodicList}
-    renderItem={({ item }) => 
-      <PeriodicItem 
-      item={item} 
-      onSwipe={onCheck} 
-      onPress={onCheck} />
-    }/>
+      data={data.filter(
+        (data) =>
+          data.status !== TodoStatus.DELETED && data.type === TodoType.PERIODIC,
+      )}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.periodicList}
+      renderItem={({ item }) => (
+        <PeriodicItem item={item} onSwipe={onCheck} onPress={onCheck} />
+      )}
+    />
   );
-}
+};

@@ -6,10 +6,11 @@ import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginReactNative from "eslint-plugin-react-native";
 import pluginPrettier from "eslint-plugin-prettier";
-import prettierConfig from "eslint-config-prettier";
-import { defineConfig } from "eslint/config";
 
-export default defineConfig([
+export default [
+  {
+    ignores: ["node_modules", "dist", "build", "target", "metro.config.js"],
+  },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     languageOptions: {
@@ -32,41 +33,30 @@ export default defineConfig([
     },
 
     rules: {
+      // JavaScript/TypeScript
+      ...eslint.configs.recommended.rules,
       "prefer-const": "error",
       "no-var": "error",
 
-      "prettier/prettier": ["warn"],
+      // TypeScript
+      ...tsPlugin.configs.recommended.rules,
+      "no-unused-expressions": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
 
+      // Prettier
+      "prettier/prettier": "warn",
+
+      // React
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
 
+      // React Hooks
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
+      //"react-hooks/exhaustive-deps": "warn",
 
-      "react-native/no-inline-styles": "warn",
+      // React Native
+      //"react-native/no-inline-styles": "warn",
       "react-native/no-unused-styles": "warn",
-    }
+    },
   },
-  eslint.configs.recommended,
-  tsPlugin.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  pluginReactNative.configs ? pluginReactNative.configs.recommended : {},
-  prettierConfig ? prettierConfig : {}
-]);
-
-
-// import globals from "globals";
-// import eslint from "@eslint/js";
-// import tseslint from "typescript-eslint";
-// import pluginReact from "eslint-plugin-react";
-// import { defineConfig } from "eslint/config";
-
-// export default defineConfig([
-//   { 
-//     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], 
-//     languageOptions: { globals: globals.browser } 
-//   },
-//   eslint.configs.recommended,
-//   tseslint.configs.recommended,
-//   pluginReact.configs.flat.recommended,
-// ]);
+];

@@ -9,19 +9,24 @@ export type DonePageProp = {
   onDelete: (id: string) => void;
 };
 
-export const DonePage = ({data, onUncheck, onDelete}: DonePageProp) => {
+export const DonePage = ({ data, onUncheck, onDelete }: DonePageProp) => {
   return (
     <FlatList
-    data={data.filter(data => data.type === TodoType.SINGLE && data.status === TodoStatus.DONE)}
-    keyExtractor={item => item.id}
-    style={{flex: 1}}
-    contentContainerStyle={styles.singleList}
-    renderItem={({ item }) => 
-      <TodoListItem 
-      item={item} 
-      onSwipe={onDelete} 
-      onPress={onUncheck}
-      swipeRight/>
-    }/>
+      data={data.filter(
+        (data) =>
+          data.type === TodoType.SINGLE && data.status === TodoStatus.DONE,
+      )}
+      keyExtractor={(item) => item.id}
+      style={{ flex: 1 }}
+      contentContainerStyle={styles.singleList}
+      renderItem={({ item }) => (
+        <TodoListItem
+          item={item}
+          onSwipe={onDelete}
+          onPress={onUncheck}
+          swipeRight
+        />
+      )}
+    />
   );
-}
+};
