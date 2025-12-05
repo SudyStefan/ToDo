@@ -1,10 +1,10 @@
-package todo.api_java;
+package api.gemini;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiJavaApplicationTests {
+class GeminiApplicationTests {
 
 	@Test
 	void contextLoads() {

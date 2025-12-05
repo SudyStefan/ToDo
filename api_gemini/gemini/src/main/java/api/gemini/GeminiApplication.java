@@ -1,13 +1,13 @@
-package todo.api_java;
+package api.gemini;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ApiJavaApplication {
+public class GeminiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ApiJavaApplication.class, args);
+		SpringApplication.run(GeminiApplication.class, args);
 	}
 
 }
