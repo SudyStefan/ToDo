@@ -122,6 +122,8 @@ export const styles = StyleSheet.create({
   floatingPressableView: {
     position: "absolute",
     bottom: 100,
+    width: "100%",
     flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 });

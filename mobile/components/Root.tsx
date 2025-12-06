@@ -10,6 +10,7 @@ import { DonePage } from "./DonePage";
 import { InfoPopup, PopupItem } from "./InfoPopup";
 import { todoService } from "../services/todoService";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { geminiService } from "../services/geminiService";
 
 const routes = [
   { key: "single", title: "SINGLE" },
@@ -70,7 +71,7 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
         .catch((err) => console.error(`Failed to sync: ${err}`));
   };
 
-  const addTodo = async (text: string, type: TodoType, period = undefined) => {
+  const addTodo = (text: string, type: TodoType, period = undefined) => {
     const todo: TodoDraft = {
       text: text,
       status: TodoStatus.OPEN,
@@ -112,6 +113,15 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
     />
   );
 
+  const geminiTest = (text: string): void => {
+    geminiService
+      .fetchGeminiResponse(text)
+      .then((res) => {
+        addTodo(res, TodoType.SINGLE);
+      })
+      .catch((err) => console.error(err));
+  };
+
   const SafeView = Platform.OS === "web" ? View : SafeAreaView;
   return (
     <SafeView style={styles.root} testID="Root">
@@ -151,7 +161,7 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
           iconName={"add"}
         />
         <FloatingPressable
-          onPress={() => {}}
+          onPress={() => geminiTest("I ran out of toilet paper")}
           style={styles.roundPressableButton}
           iconName={"mic"}
         />

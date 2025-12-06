@@ -7,14 +7,16 @@ import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Schema;
 import com.google.genai.types.Type;
 
+import api.gemini.models.GeminiResponse;
+
 public class GeminiService {
-  public static void generateTodoDTO(String text) {
+  public static GeminiResponse promptForTodo(String text) {
     Client client = Client.builder().apiKey(System.getenv("GEMINI_API_KEY")).build();
 
     Schema schema = Schema.builder()
       .type(Type.Known.STRING)
       .title("text")
-      .description("A concise summary of the input that can be put into a checklist.")
+      .description("A concise summary of the input, four words or less, that can be put into a checklist/todo list.")
       .build();
           
     GenerateContentConfig config = GenerateContentConfig.builder()
@@ -24,6 +26,7 @@ public class GeminiService {
 
     GenerateContentResponse response = client.models.generateContent("gemini-2.5-flash", text, config);
 
-    System.out.println(response.text());
+    return new GeminiResponse(response.text(), text);
+
   }
 }
