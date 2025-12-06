@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-GeminiApplication<gemini>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "api.gemini.GeminiApplication",
+      "projectName": "gemini",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
