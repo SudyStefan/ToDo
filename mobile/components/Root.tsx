@@ -1,4 +1,4 @@
-import { Todo, TodoDraft, TodoStatus, TodoType } from "../types/todo";
+import { Todo, TodoStatus, TodoType } from "../types/todo";
 import { Platform, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import React, { useState } from "react";
@@ -11,6 +11,8 @@ import { InfoPopup, PopupItem } from "./InfoPopup";
 import { todoService } from "../services/todoService";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { geminiService } from "../services/geminiService";
+import { v4 as uuid } from "uuid";
+import { OfflineStorage } from "../offline_storage/OfflineStorage";
 
 const routes = [
   { key: "single", title: "SINGLE" },
@@ -21,9 +23,10 @@ export type RootProp = {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   online: boolean;
+  offlineStorage: OfflineStorage;
 };
 
-export const Root = ({ todos, setTodos, online }: RootProp) => {
+export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
   const [index, setIndex] = React.useState(0);
@@ -42,23 +45,25 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
     ]);
     setTodos(
       todos.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item,
-      ),
+        item.id === id ? { ...item, status: newStatus } : item
+      )
     );
+    offlineStorage.upsertTodo({
+      ...todo,
+      status: newStatus,
+    });
   };
 
   const undoChange = (id: string) => {
+    const revertedTodo: Todo = {
+      ...todos.find((item) => item.id === id)!,
+      status: popupItems.find((item) => item.id === id)!.prevStatus!,
+    };
     setTodos((items) =>
-      items.map((todo) =>
-        todo.id === id
-          ? {
-              ...todo,
-              status: popupItems.find((item) => item.id === id)!.prevStatus!,
-            }
-          : todo,
-      ),
+      items.map((todo) => (todo.id === id ? revertedTodo : todo))
     );
     setPopupItems((changed) => changed.filter((todo) => todo.id !== id));
+    offlineStorage.upsertTodo(revertedTodo);
   };
 
   const syncOnTimeout = (id: string) => {
@@ -66,13 +71,14 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
       todoService
         .putTodo(todos.find((item) => item.id === id)!)
         .then(() =>
-          setPopupItems((prev) => prev.filter((item) => item.id !== id)),
+          setPopupItems((prev) => prev.filter((item) => item.id !== id))
         )
         .catch((err) => console.error(`Failed to sync: ${err}`));
   };
 
   const addTodo = (text: string, type: TodoType, period = undefined) => {
-    const todo: TodoDraft = {
+    const todo: Todo = {
+      id: uuid(),
       text: text,
       status: TodoStatus.OPEN,
       creationDate: new Date(),
@@ -80,14 +86,20 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
       periodSeconds: period,
     };
 
-    online &&
+    if (online) {
       todoService
         .postTodo(todo)
-        .then((newTodo) => setTodos([...todos, newTodo]))
+        .then((newTodo) => {
+          setTodos([...todos, newTodo]);
+          offlineStorage.upsertTodo(newTodo);
+        })
         .catch((err) => {
           console.error("Failed to add todo:", err);
           //Implement adding error to popup
         });
+    } else {
+      offlineStorage.upsertTodo(todo);
+    }
 
     setAddViewVisible(false);
   };
@@ -96,7 +108,7 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
     <SinglePage
       data={todos.filter(
         (item) =>
-          item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN,
+          item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN
       )}
       onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)}
     />
@@ -106,7 +118,7 @@ export const Root = ({ todos, setTodos, online }: RootProp) => {
     <DonePage
       data={todos.filter(
         (item) =>
-          item.type === TodoType.SINGLE && item.status === TodoStatus.DONE,
+          item.type === TodoType.SINGLE && item.status === TodoStatus.DONE
       )}
       onUncheck={(id: string) => changeTodo(id, TodoStatus.OPEN)}
       onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)}

@@ -3,14 +3,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { OfflineStorage } from "./OfflineStorage";
 
 class OfflineStorageLive implements OfflineStorage {
-  public storeTodo = (todo: Todo): void => {
+  public upsertTodo = (todo: Todo): void => {
     AsyncStorage.setItem(todo.id, JSON.stringify(todo)).catch((err) =>
       console.error(`Error trying to store todo ${todo.id}:`, err),
     );
   };
 
-  public storeAllTodos = (todos: Todo[]): void => {
-    todos.forEach((todo) => this.storeTodo(todo));
+  public upsertAllTodos = (todos: Todo[]): void => {
+    todos.forEach((todo) => this.upsertTodo(todo));
   };
 
   public fetchTodo = (id: string): Promise<Todo | null> => {

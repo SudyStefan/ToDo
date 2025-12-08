@@ -13,15 +13,15 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [onlineToggle, setOnlineToggle] = useState(false);
+  const storage: OfflineStorage =
+    Platform.OS === "web" ? offlineStorageDev : offlineStorageLive;
 
   useEffect(() => {
-    const storage: OfflineStorage =
-      Platform.OS === "web" ? offlineStorageDev : offlineStorageLive;
     todoService
       .fetchTodos()
       .then((fetchedTodos) => {
         setTodos(fetchedTodos);
-        storage.storeAllTodos(fetchedTodos);
+        storage.upsertAllTodos(fetchedTodos);
         setOnlineToggle(true);
       })
       .catch(() => {
@@ -47,7 +47,12 @@ export default function App() {
   }
   return (
     <GestureHandlerRootView>
-      <Root todos={todos} setTodos={setTodos} online={onlineToggle} />
+      <Root
+        todos={todos}
+        setTodos={setTodos}
+        online={onlineToggle}
+        offlineStorage={storage}
+      />
     </GestureHandlerRootView>
   );
 }
