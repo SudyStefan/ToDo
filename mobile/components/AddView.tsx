@@ -20,44 +20,42 @@ export const AddView = ({ isVisible, onAdd, onClose }: AddViewProps) => {
   };
 
   return (
-    <View style={styles.fullScreenView} testID="AddView">
-      <Modal
-        visible={isVisible}
-        animationType="fade"
-        transparent={true}
-        style={styles.fullScreenView}
-        onShow={() => inputRef.current?.focus()}
-      >
-        <View style={styles.addView}>
-          <TextInput
-            ref={inputRef}
-            style={{ ...styles.addText, textAlign: "center" }}
-            placeholder="todo name..."
-            value={text}
-            onChangeText={(text) => setText(text)}
-          />
-          <View style={{ flexDirection: "row", marginLeft: 10 }}>
-            <Pressable
-              onPress={() => {
-                onAdd(text, TodoType.SINGLE);
-                initClose();
-              }}
-              style={styles.pressableButton}
-            >
-              <Text style={styles.addText}>ADD</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => initClose()}
-              style={{
-                ...styles.pressableButton,
-                backgroundColor: colors.soxred,
-              }}
-            >
-              <Text style={styles.addText}>CANCEL</Text>
-            </Pressable>
-          </View>
+    <Modal
+      visible={isVisible}
+      animationType="fade"
+      transparent={true}
+      style={styles.fullScreenView}
+      onShow={() => inputRef.current?.focus()}
+    >
+      <View style={styles.addView}>
+        <TextInput
+          ref={inputRef}
+          style={{ ...styles.addText, textAlign: "center" }}
+          placeholder="todo name..."
+          value={text}
+          onChangeText={(text) => setText(text)}
+        />
+        <View style={{ flexDirection: "row", marginLeft: 10 }}>
+          <Pressable
+            onPress={() => {
+              onAdd(text, TodoType.SINGLE);
+              initClose();
+            }}
+            style={styles.pressableButton}
+          >
+            <Text style={styles.addText}>ADD</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => initClose()}
+            style={{
+              ...styles.pressableButton,
+              backgroundColor: colors.soxred,
+            }}
+          >
+            <Text style={styles.addText}>CANCEL</Text>
+          </Pressable>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };

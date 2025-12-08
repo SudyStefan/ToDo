@@ -1,7 +1,7 @@
 import { Todo, TodoStatus, TodoType } from "../types/todo";
 import { Platform, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SinglePage } from "./SinglePage";
 import { styles, colors } from "../styles/styles";
 import { FloatingPressable } from "./FloatingPressable";
@@ -13,6 +13,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { geminiService } from "../services/geminiService";
 import { v4 as uuid } from "uuid";
 import { OfflineStorage } from "../offline_storage/OfflineStorage";
+import {
+  useAudioRecorder,
+  AudioModule,
+  RecordingPresets,
+  setAudioModeAsync,
+} from "expo-audio";
+import { VoiceView } from "./VoiceView";
 
 const routes = [
   { key: "single", title: "SINGLE" },
@@ -28,9 +35,55 @@ export type RootProp = {
 
 export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
+  const [voiceViewVisible, setVoiceViewVisible] = useState(false);
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
   const [index, setIndex] = React.useState(0);
   const layout = useWindowDimensions();
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+
+  useEffect(() => {
+    AudioModule.requestRecordingPermissionsAsync().then((status) => {
+      if (!status.granted) {
+        console.error("Permission to access microphone was denied");
+      }
+
+      setAudioModeAsync({
+        playsInSilentMode: true,
+        allowsRecording: true,
+      });
+    });
+  }, []);
+
+  const record = () => {
+    audioRecorder
+      .prepareToRecordAsync()
+      .then(() => {
+        setVoiceViewVisible(true);
+        audioRecorder.record();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const stopRecording = () => {
+    audioRecorder
+      .stop()
+      .then(() => {
+        const audioUri = audioRecorder.uri;
+        if (audioUri) {
+          console.log("Recording stopped. File URI: ", audioUri);
+          geminiService.fetchFromAudio(audioUri).then((res) => {
+            console.log(res);
+            addTodo(res, TodoType.SINGLE);
+            setVoiceViewVisible(false);
+          });
+        } else {
+          console.error("Recording stopped but no URI found!");
+        }
+      })
+      .catch((err) =>
+        console.error("Error when trying to make todo from audio:", err)
+      );
+  };
 
   const changeTodo = (id: string, newStatus: TodoStatus) => {
     const todo = todos.find((item) => item.id === id)!;
@@ -98,9 +151,10 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
           //Implement adding error to popup
         });
     } else {
+      console.log(todo);
       offlineStorage.upsertTodo(todo);
+      setTodos([...todos, todo]);
     }
-
     setAddViewVisible(false);
   };
 
@@ -125,15 +179,6 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
     />
   );
 
-  const geminiTest = (text: string): void => {
-    geminiService
-      .fetchGeminiResponse(text)
-      .then((res) => {
-        addTodo(res, TodoType.SINGLE);
-      })
-      .catch((err) => console.error(err));
-  };
-
   const SafeView = Platform.OS === "web" ? View : SafeAreaView;
   return (
     <SafeView style={styles.root} testID="Root">
@@ -142,6 +187,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
         onAdd={(text: string, type: TodoType) => addTodo(text, type)}
         onClose={() => setAddViewVisible(false)}
       />
+      <VoiceView isVisible={voiceViewVisible} onClose={stopRecording} />
       <TabView
         testID="TabView"
         navigationState={{ index, routes }}
@@ -173,7 +219,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
           iconName={"add"}
         />
         <FloatingPressable
-          onPress={() => geminiTest("I ran out of toilet paper")}
+          onPress={() => record()}
           style={styles.roundPressableButton}
           iconName={"mic"}
         />
