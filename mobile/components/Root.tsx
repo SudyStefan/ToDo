@@ -13,12 +13,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { geminiService } from "../services/geminiService";
 import { v4 as uuid } from "uuid";
 import { OfflineStorage } from "../offline_storage/OfflineStorage";
-import {
-  useAudioRecorder,
-  AudioModule,
-  RecordingPresets,
-  setAudioModeAsync,
-} from "expo-audio";
 import { VoiceView } from "./VoiceView";
 
 const routes = [
@@ -35,54 +29,14 @@ export type RootProp = {
 
 export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
   const [addViewVisible, setAddViewVisible] = useState(false);
-  const [voiceViewVisible, setVoiceViewVisible] = useState(false);
   const [popupItems, setPopupItems] = useState<PopupItem[]>([]);
-  const [index, setIndex] = React.useState(0);
+  const [navIndex, setNavIndex] = useState(0);
+  const [isRecognizingSpeech, setIsRecognizingSpeech] = useState(false);
+
   const layout = useWindowDimensions();
-  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
 
-  useEffect(() => {
-    AudioModule.requestRecordingPermissionsAsync().then((status) => {
-      if (!status.granted) {
-        console.error("Permission to access microphone was denied");
-      }
-
-      setAudioModeAsync({
-        playsInSilentMode: true,
-        allowsRecording: true,
-      });
-    });
-  }, []);
-
-  const record = () => {
-    audioRecorder
-      .prepareToRecordAsync()
-      .then(() => {
-        setVoiceViewVisible(true);
-        audioRecorder.record();
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const stopRecording = () => {
-    audioRecorder
-      .stop()
-      .then(() => {
-        const audioUri = audioRecorder.uri;
-        if (audioUri) {
-          console.log("Recording stopped. File URI: ", audioUri);
-          geminiService.fetchFromAudio(audioUri).then((res) => {
-            console.log(res);
-            addTodo(res, TodoType.SINGLE);
-            setVoiceViewVisible(false);
-          });
-        } else {
-          console.error("Recording stopped but no URI found!");
-        }
-      })
-      .catch((err) =>
-        console.error("Error when trying to make todo from audio:", err)
-      );
+  const handleTranscribedSpeech = (transcript: string) => {
+    console.log("received transcript:", transcript);
   };
 
   const changeTodo = (id: string, newStatus: TodoStatus) => {
@@ -187,18 +141,22 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
         onAdd={(text: string, type: TodoType) => addTodo(text, type)}
         onClose={() => setAddViewVisible(false)}
       />
-      <VoiceView isVisible={voiceViewVisible} onClose={stopRecording} />
+      <VoiceView
+        isRecognizing={isRecognizingSpeech}
+        setIsRecognizing={setIsRecognizingSpeech}
+        onClose={handleTranscribedSpeech}
+      />
       <TabView
         testID="TabView"
-        navigationState={{ index, routes }}
+        navigationState={{ index: navIndex, routes }}
         renderScene={SceneMap({
           single: SingleRoute,
           done: DoneRoute,
         })}
-        onIndexChange={setIndex}
+        onIndexChange={setNavIndex}
         initialLayout={{ width: layout.width }}
         tabBarPosition="bottom"
-        commonOptions={{ labelStyle: { fontSize: layout.height * 0.02 } }} //??? https://stackoverflow.com/a/79518059
+        commonOptions={{ labelStyle: { fontSize: 20 } }} //??? https://stackoverflow.com/a/79518059
         renderTabBar={(props) => (
           <TabBar
             {...props}
@@ -219,7 +177,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
           iconName={"add"}
         />
         <FloatingPressable
-          onPress={() => record()}
+          onPress={() => setIsRecognizingSpeech(true)}
           style={styles.roundPressableButton}
           iconName={"mic"}
         />

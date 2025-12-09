@@ -45,6 +45,7 @@ export default [
 
       // Prettier
       "prettier/prettier": "warn",
+      "comma-dangle": 0,
 
       // React
       "react/react-in-jsx-scope": "off",
