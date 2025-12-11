@@ -5,7 +5,7 @@ import { OfflineStorage } from "./OfflineStorage";
 class OfflineStorageLive implements OfflineStorage {
   public upsertTodo = (todo: Todo): void => {
     AsyncStorage.setItem(todo.id, JSON.stringify(todo)).catch((err) =>
-      console.error(`Error trying to store todo ${todo.id}:`, err),
+      console.error(`Error trying to store todo ${todo.id}:`, err)
     );
   };
 
@@ -22,8 +22,8 @@ class OfflineStorageLive implements OfflineStorage {
               ...todo,
               creationDate: new Date(todo.creationDate),
               ...(todo.lastChecked && {
-                lastChecked: new Date(todo.lastChecked),
-              }),
+                lastChecked: new Date(todo.lastChecked)
+              })
             }
           : null;
       })
@@ -37,8 +37,8 @@ class OfflineStorageLive implements OfflineStorage {
     return AsyncStorage.getAllKeys()
       .then((keys) =>
         Promise.all(keys.map((key) => this.fetchTodo(key))).then((todos) =>
-          todos.filter((todo) => todo !== null),
-        ),
+          todos.filter((todo) => todo !== null)
+        )
       )
       .catch((err) => {
         console.warn("Could not fetch offline data:", err);

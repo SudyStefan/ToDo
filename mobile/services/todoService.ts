@@ -9,7 +9,7 @@ class TodoService {
       status: dto.status as TodoStatus,
       type: dto.type as TodoType,
       creationDate: new Date(dto.creationDate),
-      lastChecked: dto.lastChecked ? new Date(dto.lastChecked) : undefined,
+      lastChecked: dto.lastChecked ? new Date(dto.lastChecked) : undefined
     };
   };
 
@@ -19,7 +19,7 @@ class TodoService {
       creationDate: entry.creationDate.toISOString(),
       lastChecked: entry.lastChecked
         ? entry.lastChecked.toISOString()
-        : undefined,
+        : undefined
     };
   };
 
@@ -28,7 +28,7 @@ class TodoService {
       .get("http://localhost:4000/todo")
       .then((res) => {
         const todos = res.data.map((dto: TodoDTO) =>
-          this.fromDTO(dto),
+          this.fromDTO(dto)
         ) as Todo[];
         console.info(`Fetched ${todos.length} todos`);
         return todos;

@@ -24,10 +24,10 @@ class OfflineStorageDev implements OfflineStorage {
             ...parsedJson,
             creationDate: new Date(parsedJson.creationDate),
             ...(parsedJson.lastChecked && {
-              lastChecked: new Date(parsedJson.lastChecked),
-            }),
+              lastChecked: new Date(parsedJson.lastChecked)
+            })
           }
-        : null,
+        : null
     );
   };
 

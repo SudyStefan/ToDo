@@ -9,7 +9,7 @@ import pluginPrettier from "eslint-plugin-prettier";
 
 export default [
   {
-    ignores: ["node_modules", "dist", "build", "target", "metro.config.js"],
+    ignores: ["node_modules", "dist", "build", "target", "metro.config.js"]
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
@@ -20,8 +20,8 @@ export default [
         ecmaVersion: "latest",
         sourceType: "module",
         ecmaFeatures: { jsx: true },
-        project: "./tsconfig.json",
-      },
+        project: "./tsconfig.json"
+      }
     },
 
     plugins: {
@@ -29,7 +29,7 @@ export default [
       react: pluginReact,
       "react-hooks": pluginReactHooks,
       "react-native": pluginReactNative,
-      prettier: pluginPrettier,
+      prettier: pluginPrettier
     },
 
     rules: {
@@ -45,8 +45,8 @@ export default [
 
       // Prettier
       "prettier/prettier": "warn",
-      "comma-dangle": 0,
-      endOfLine: "off",
+      "comma-dangle": "off",
+      "linebreak-style": "off",
 
       // React
       "react/react-in-jsx-scope": "off",
@@ -58,7 +58,7 @@ export default [
 
       // React Native
       //"react-native/no-inline-styles": "warn",
-      "react-native/no-unused-styles": "warn",
-    },
-  },
+      "react-native/no-unused-styles": "warn"
+    }
+  }
 ];

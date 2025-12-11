@@ -14,7 +14,7 @@ export const PeriodicPage = ({ data, onCheck }: PeriodicPageProp) => {
     <FlatList
       data={data.filter(
         (data) =>
-          data.status !== TodoStatus.DELETED && data.type === TodoType.PERIODIC,
+          data.status !== TodoStatus.DELETED && data.type === TodoType.PERIODIC
       )}
       keyExtractor={(item) => item.id}
       contentContainerStyle={styles.periodicList}

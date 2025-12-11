@@ -49,7 +49,7 @@ export const AddView = ({ isVisible, onAdd, onClose }: AddViewProps) => {
             onPress={() => initClose()}
             style={{
               ...styles.pressableButton,
-              backgroundColor: colors.soxred,
+              backgroundColor: colors.soxred
             }}
           >
             <Text style={styles.addText}>CANCEL</Text>

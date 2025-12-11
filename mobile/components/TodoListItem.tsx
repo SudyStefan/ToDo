@@ -18,7 +18,7 @@ export const TodoListItem = ({
   onPress,
   onSwipe,
   swipeLeft = false,
-  swipeRight = false,
+  swipeRight = false
 }: TodoItemProp) => {
   const renderActions = (text: string) => (
     <View style={styles.swipeContainer}>

@@ -33,13 +33,13 @@ class GeminiService {
           })
           .catch((err) => {
             throw err;
-          }),
+          })
       );
     } else {
       formData.append("audiofile", {
         uri: audioUri,
         type: "audio/m4a",
-        name: audioUri.split("/").pop() || "recording.m4a",
+        name: audioUri.split("/").pop() || "recording.m4a"
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
       return axios

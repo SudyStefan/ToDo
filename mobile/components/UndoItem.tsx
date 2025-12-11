@@ -16,7 +16,7 @@ export const UndoItem = ({ text, onUndo, onTimeout }: UndoItemProp) => {
     Animated.timing(itemOpacity, {
       toValue: 1,
       duration: 300,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start();
 
     wait(3000)
@@ -24,8 +24,8 @@ export const UndoItem = ({ text, onUndo, onTimeout }: UndoItemProp) => {
         Animated.timing(itemOpacity, {
           toValue: 0,
           duration: 1500,
-          useNativeDriver: true,
-        }).start(),
+          useNativeDriver: true
+        }).start()
       )
       .then(() => wait(1500))
       .then(() => onTimeout());

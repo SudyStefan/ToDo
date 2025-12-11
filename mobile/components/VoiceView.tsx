@@ -2,7 +2,7 @@ import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
 import { styles } from "../styles/styles";
 import {
   ExpoSpeechRecognitionModule,
-  useSpeechRecognitionEvent,
+  useSpeechRecognitionEvent
 } from "expo-speech-recognition";
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
@@ -15,7 +15,7 @@ export type VoiceViewProps = {
 export const VoiceView = ({
   isRecognizing,
   setIsRecognizing,
-  onClose,
+  onClose
 }: VoiceViewProps) => {
   const [transcript, setTranscript] = useState("");
 
@@ -42,7 +42,7 @@ export const VoiceView = ({
       ExpoSpeechRecognitionModule.start({
         lang: "en-US",
         interimResults: true,
-        continuous: false,
+        continuous: false
       });
     });
   };

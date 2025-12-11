@@ -20,14 +20,14 @@ export const PeriodicItem = ({ item, onSwipe }: PeriodicItemProp) => {
         Math.min(
           (Date.now() / 1000 - item.lastChecked!.getTime() / 1000) /
             item.periodSeconds!,
-          1,
-        ),
+          1
+        )
       );
       setMinutesUntilDue(
         (item.lastChecked!.getTime() / 1000 +
           item.periodSeconds! -
           Date.now() / 1000) /
-          60,
+          60
       );
     } catch (err) {
       console.error(`${err} - lastChecked type: ${typeof item.lastChecked}`);
@@ -51,7 +51,7 @@ export const PeriodicItem = ({ item, onSwipe }: PeriodicItemProp) => {
         borderBottomWidth: 0,
         paddingHorizontal: 0,
         paddingVertical: 0,
-        minHeight: "10%",
+        minHeight: "10%"
       }}
       testID="TodoItem"
     >
@@ -66,7 +66,7 @@ export const PeriodicItem = ({ item, onSwipe }: PeriodicItemProp) => {
               ? prog < 0.5
                 ? colors.seattlegreen
                 : colors.giantsorange
-              : colors.soxred,
+              : colors.soxred
         }}
       />
       <Text

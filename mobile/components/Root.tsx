@@ -17,7 +17,7 @@ import { VoiceView } from "./VoiceView";
 
 const routes = [
   { key: "single", title: "SINGLE" },
-  { key: "done", title: "DONE" },
+  { key: "done", title: "DONE" }
 ];
 
 export type RootProp = {
@@ -37,6 +37,15 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
 
   const handleTranscribedSpeech = (transcript: string) => {
     console.log("received transcript:", transcript);
+    geminiService
+      .fetchFromTranscript(transcript)
+      .then((responseText) => {
+        console.log("gemini response:", responseText);
+        addTodo(responseText, TodoType.SINGLE);
+      })
+      .catch((err) => {
+        console.error("Error fetching from Gemini:", err);
+      });
   };
 
   const changeTodo = (id: string, newStatus: TodoStatus) => {
@@ -47,27 +56,27 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
         id: todo.id,
         text: todo.text,
         prevStatus: todo.status,
-        currentStatus: newStatus,
-      },
+        currentStatus: newStatus
+      }
     ]);
     setTodos(
       todos.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item,
-      ),
+        item.id === id ? { ...item, status: newStatus } : item
+      )
     );
     offlineStorage.upsertTodo({
       ...todo,
-      status: newStatus,
+      status: newStatus
     });
   };
 
   const undoChange = (id: string) => {
     const revertedTodo: Todo = {
       ...todos.find((item) => item.id === id)!,
-      status: popupItems.find((item) => item.id === id)!.prevStatus!,
+      status: popupItems.find((item) => item.id === id)!.prevStatus!
     };
     setTodos((items) =>
-      items.map((todo) => (todo.id === id ? revertedTodo : todo)),
+      items.map((todo) => (todo.id === id ? revertedTodo : todo))
     );
     setPopupItems((changed) => changed.filter((todo) => todo.id !== id));
     offlineStorage.upsertTodo(revertedTodo);
@@ -78,7 +87,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
       todoService
         .putTodo(todos.find((item) => item.id === id)!)
         .then(() =>
-          setPopupItems((prev) => prev.filter((item) => item.id !== id)),
+          setPopupItems((prev) => prev.filter((item) => item.id !== id))
         )
         .catch((err) => console.error(`Failed to sync: ${err}`));
   };
@@ -90,7 +99,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
       status: TodoStatus.OPEN,
       creationDate: new Date(),
       type: type,
-      periodSeconds: period,
+      periodSeconds: period
     };
 
     if (online) {
@@ -116,7 +125,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
     <SinglePage
       data={todos.filter(
         (item) =>
-          item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN,
+          item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN
       )}
       onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)}
     />
@@ -126,7 +135,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
     <DonePage
       data={todos.filter(
         (item) =>
-          item.type === TodoType.SINGLE && item.status === TodoStatus.DONE,
+          item.type === TodoType.SINGLE && item.status === TodoStatus.DONE
       )}
       onUncheck={(id: string) => changeTodo(id, TodoStatus.OPEN)}
       onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)}
@@ -151,7 +160,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
         navigationState={{ index: navIndex, routes }}
         renderScene={SceneMap({
           single: SingleRoute,
-          done: DoneRoute,
+          done: DoneRoute
         })}
         onIndexChange={setNavIndex}
         initialLayout={{ width: layout.width }}
@@ -164,7 +173,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
             indicatorStyle={{
               top: 0,
               height: "100%",
-              backgroundColor: colors.primaryDark,
+              backgroundColor: colors.primaryDark
             }}
             activeColor={colors.secondaryLight}
           />

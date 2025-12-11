@@ -9,18 +9,18 @@ export const colors = {
   soxred: "rgb(189, 48, 57)", //color of the boston red sox
   dodgerblue: "dodgerblue", //color of the la dodgers
   seattlegreen: "rgb(0, 122, 51)", //color of the seattle mariners
-  giantsorange: "rgb(254, 90, 29)", //color of the sf giants
+  giantsorange: "rgb(254, 90, 29)" //color of the sf giants
 };
 
 export const styles = StyleSheet.create({
   loadingView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   root: {
     flex: 1,
-    backgroundColor: colors.primaryDark,
+    backgroundColor: colors.primaryDark
   },
   item: {
     flexGrow: 1,
@@ -30,12 +30,12 @@ export const styles = StyleSheet.create({
     borderColor: colors.secondaryDark,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "center"
   },
   itemText: {
     fontSize: 30,
     color: colors.primaryLight,
-    maxWidth: "75%",
+    maxWidth: "75%"
   },
   pressableButton: {
     flex: 1,
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 40,
     alignItems: "center",
     borderRadius: 3,
-    backgroundColor: colors.dodgerblue,
+    backgroundColor: colors.dodgerblue
   },
   roundPressableButton: {
     backgroundColor: colors.dodgerblue,
@@ -52,64 +52,64 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 100,
-    height: 100,
+    height: 100
   },
   swipeContainer: {
     flex: 1,
     backgroundColor: colors.soxred,
     justifyContent: "center",
     alignItems: "flex-end",
-    paddingHorizontal: 50,
+    paddingHorizontal: 50
   },
   swipeText: {
     color: colors.primaryLight,
-    fontSize: 20,
+    fontSize: 20
   },
   addView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 250,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: "rgba(0, 0, 0, 0.7)"
   },
   addText: {
     color: colors.primaryLight,
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 30,
+    fontSize: 30
   },
   singleList: {
     flexGrow: 1,
     marginHorizontal: 20,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   periodicList: {
     flex: 1,
     marginTop: 50,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   tabBar: {
     backgroundColor: colors.secondaryDark,
     height: 80,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   fullScreenView: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
   undoView: {
     position: "absolute",
     left: 0,
     right: 0,
     bottom: 300,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   undoList: {
     flexGrow: 1,
-    marginHorizontal: 30,
+    marginHorizontal: 30
   },
   undoItem: {
     borderRadius: 20,
@@ -117,13 +117,13 @@ export const styles = StyleSheet.create({
     marginVertical: 3,
     borderBottomWidth: 0,
     justifyContent: "space-between",
-    backgroundColor: "rgba(150, 150, 150, 0.5)",
+    backgroundColor: "rgba(150, 150, 150, 0.5)"
   },
   floatingPressableView: {
     position: "absolute",
     bottom: 100,
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
+    justifyContent: "space-evenly"
+  }
 });

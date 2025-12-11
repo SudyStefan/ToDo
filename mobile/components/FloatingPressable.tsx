@@ -13,7 +13,7 @@ export type FloatingPressableProp = {
 export const FloatingPressable = ({
   onPress,
   style,
-  iconName,
+  iconName
 }: FloatingPressableProp) => {
   return (
     <Pressable onPress={() => onPress()} style={style}>
