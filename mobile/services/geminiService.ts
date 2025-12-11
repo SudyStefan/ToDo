@@ -33,7 +33,7 @@ class GeminiService {
           })
           .catch((err) => {
             throw err;
-          })
+          }),
       );
     } else {
       formData.append("audiofile", {

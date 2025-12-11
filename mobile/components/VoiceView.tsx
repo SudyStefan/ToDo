@@ -3,7 +3,7 @@ import { styles } from "../styles/styles";
 import {
   ExpoSpeechRecognitionModule,
   useSpeechRecognitionEvent,
-} from "@jamsch/expo-speech-recognition";
+} from "expo-speech-recognition";
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 
 export type VoiceViewProps = {
@@ -22,11 +22,14 @@ export const VoiceView = ({
   useSpeechRecognitionEvent("start", () => setIsRecognizing(true));
   useSpeechRecognitionEvent("end", () => setIsRecognizing(false));
   useSpeechRecognitionEvent("result", (event) => {
-    console.log("event called");
+    console.log("result event called:", event.results[0].transcript);
     setTranscript(event.results[0].transcript);
   });
   useSpeechRecognitionEvent("error", (event) => {
     console.error("error code:", event.error, "error msg:", event.message);
+  });
+  useSpeechRecognitionEvent("nomatch", (event) => {
+    console.warn("No match:", event);
   });
 
   const handleStart = () => {
@@ -35,16 +38,17 @@ export const VoiceView = ({
         console.warn("Permission not granted", result);
         return;
       }
+      console.log("Starting speech recognition...");
       ExpoSpeechRecognitionModule.start({
         lang: "en-US",
         interimResults: true,
+        continuous: false,
       });
     });
   };
 
   const handleStop = () => {
     ExpoSpeechRecognitionModule.stop();
-    console.log("transcript:", transcript);
     onClose(transcript);
   };
 

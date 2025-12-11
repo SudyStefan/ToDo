@@ -1,7 +1,7 @@
 import { Todo, TodoStatus, TodoType } from "../types/todo";
 import { Platform, useWindowDimensions, View } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SinglePage } from "./SinglePage";
 import { styles, colors } from "../styles/styles";
 import { FloatingPressable } from "./FloatingPressable";
@@ -52,8 +52,8 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
     ]);
     setTodos(
       todos.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      )
+        item.id === id ? { ...item, status: newStatus } : item,
+      ),
     );
     offlineStorage.upsertTodo({
       ...todo,
@@ -67,7 +67,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
       status: popupItems.find((item) => item.id === id)!.prevStatus!,
     };
     setTodos((items) =>
-      items.map((todo) => (todo.id === id ? revertedTodo : todo))
+      items.map((todo) => (todo.id === id ? revertedTodo : todo)),
     );
     setPopupItems((changed) => changed.filter((todo) => todo.id !== id));
     offlineStorage.upsertTodo(revertedTodo);
@@ -78,7 +78,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
       todoService
         .putTodo(todos.find((item) => item.id === id)!)
         .then(() =>
-          setPopupItems((prev) => prev.filter((item) => item.id !== id))
+          setPopupItems((prev) => prev.filter((item) => item.id !== id)),
         )
         .catch((err) => console.error(`Failed to sync: ${err}`));
   };
@@ -116,7 +116,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
     <SinglePage
       data={todos.filter(
         (item) =>
-          item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN
+          item.type === TodoType.SINGLE && item.status === TodoStatus.OPEN,
       )}
       onCheck={(id: string) => changeTodo(id, TodoStatus.DONE)}
     />
@@ -126,7 +126,7 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
     <DonePage
       data={todos.filter(
         (item) =>
-          item.type === TodoType.SINGLE && item.status === TodoStatus.DONE
+          item.type === TodoType.SINGLE && item.status === TodoStatus.DONE,
       )}
       onUncheck={(id: string) => changeTodo(id, TodoStatus.OPEN)}
       onDelete={(id: string) => changeTodo(id, TodoStatus.DELETED)}
