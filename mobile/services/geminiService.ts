@@ -2,7 +2,7 @@ import axios from "axios";
 import { Platform } from "react-native";
 
 class GeminiService {
-  public fetchGeminiResponse = (text: string): Promise<string> => {
+  public fetchFromTranscript = (text: string): Promise<string> => {
     return axios
       .post("http://localhost:8080/todo", text)
       .then((res) => {

@@ -1,5 +1,5 @@
 import { ActivityIndicator, Modal, Pressable, Text, View } from "react-native";
-import { styles } from "../styles/styles";
+import { colors, styles } from "../styles/styles";
 import {
   ExpoSpeechRecognitionModule,
   useSpeechRecognitionEvent
@@ -22,7 +22,6 @@ export const VoiceView = ({
   useSpeechRecognitionEvent("start", () => setIsRecognizing(true));
   useSpeechRecognitionEvent("end", () => setIsRecognizing(false));
   useSpeechRecognitionEvent("result", (event) => {
-    console.log("result event called:", event.results[0].transcript);
     setTranscript(event.results[0].transcript);
   });
   useSpeechRecognitionEvent("error", (event) => {
@@ -42,7 +41,7 @@ export const VoiceView = ({
       ExpoSpeechRecognitionModule.start({
         lang: "en-US",
         interimResults: true,
-        continuous: false
+        continuous: true
       });
     });
   };
@@ -65,11 +64,26 @@ export const VoiceView = ({
     >
       {isRecognizing && (
         <View style={styles.addView}>
-          <ActivityIndicator size="large" />
-          <Text style={styles.addText}>Recognizing...</Text>
-          <Pressable onPress={handleStop} style={styles.pressableButton}>
-            <Text style={styles.addText}>Stop</Text>
-          </Pressable>
+          <Text
+            style={{ ...styles.addText, textAlign: "center", marginBottom: 20 }}
+          >
+            {transcript ? transcript : "Listening..."}
+          </Text>
+          <View style={{ flexDirection: "row", marginLeft: 10 }}>
+            <Pressable onPress={handleStop} style={styles.pressableButton}>
+              <Text style={styles.addText}>PROCESS</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setTranscript("")}
+              style={{
+                ...styles.pressableButton,
+                backgroundColor: colors.soxred
+              }}
+            >
+              <Text style={styles.addText}>RESET</Text>
+            </Pressable>
+          </View>
+          <ActivityIndicator size="large" style={styles.speechIndicator} />
         </View>
       )}
     </Modal>

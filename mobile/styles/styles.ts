@@ -125,5 +125,10 @@ export const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-evenly"
+  },
+  speechIndicator: {
+    position: "absolute",
+    bottom: 300,
+    alignSelf: "center"
   }
 });

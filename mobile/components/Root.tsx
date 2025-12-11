@@ -36,16 +36,20 @@ export const Root = ({ todos, setTodos, online, offlineStorage }: RootProp) => {
   const layout = useWindowDimensions();
 
   const handleTranscribedSpeech = (transcript: string) => {
-    console.log("received transcript:", transcript);
-    geminiService
-      .fetchFromTranscript(transcript)
-      .then((responseText) => {
-        console.log("gemini response:", responseText);
-        addTodo(responseText, TodoType.SINGLE);
-      })
-      .catch((err) => {
-        console.error("Error fetching from Gemini:", err);
-      });
+    if (transcript.length > 0) {
+      console.log("received transcript:", transcript);
+      geminiService
+        .fetchFromTranscript(transcript)
+        .then((responseText) => {
+          console.log("gemini response:", responseText);
+          addTodo(responseText, TodoType.SINGLE);
+        })
+        .catch((err) => {
+          console.error("Error fetching from Gemini:", err);
+        });
+    } else {
+      console.log("No transcript received.");
+    }
   };
 
   const changeTodo = (id: string, newStatus: TodoStatus) => {
