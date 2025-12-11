@@ -7,7 +7,7 @@ class GeminiService {
       .post("http://localhost:8080/todo", text)
       .then((res) => {
         console.log(res.data);
-        return res.data.responseText;
+        return (res.data.responseText as string).replace('"', "");
       })
       .catch((err) => {
         console.error(`Error trying to prompt gemini:`, err);
@@ -26,7 +26,7 @@ class GeminiService {
             formData.append("audiofile", blob);
             return axios
               .post("http://localhost:8080/todoAudio", formData)
-              .then((res) => res.data.responseText)
+              .then((res) => (res.data.responseText as string).replace('"', ""))
               .catch((err) => {
                 throw err;
               });
