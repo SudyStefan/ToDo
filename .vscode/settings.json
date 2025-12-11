@@ -1,5 +1,7 @@
 {
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "interactive",
-  "java.debug.settings.onBuildFailureProceed": true
+  "java.debug.settings.onBuildFailureProceed": true,
+  "java.autobuild.enabled": false,
+  "java.errors.incompleteClasspath.severity": "ignore"
 }
